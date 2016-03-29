@@ -9,3 +9,33 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias BlueSky.Repo
+alias BlueSky.Question
+
+Repo.insert!(%Question{
+  question: "What is the capital of Nebraska?",
+  a: "Lincoln",
+  b: "Omaha",
+  c: "Grand Island",
+  d: "Inman",
+  answer: "a"
+})
+
+Repo.insert!(%Question{
+  question: "What island are lemurs found on?",
+  a: "Australia",
+  b: "Iceland",
+  c: "Madagascar",
+  d: "Hawaii",
+  answer: "c"
+})
+
+Repo.insert!(%Question{
+  question: "Who won the World Series in 2011?",
+  a: "Texas Rangers",
+  b: "New York Yankees",
+  c: "New York Jets",
+  d: "St. Louis Cardinals",
+  answer: "d"
+})
