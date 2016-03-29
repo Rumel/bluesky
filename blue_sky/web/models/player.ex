@@ -1,13 +1,14 @@
-defmodule BlueSky.Room do
+defmodule BlueSky.Player do
   use BlueSky.Web, :model
 
-  schema "rooms" do
-    has_many :players, BlueSky.Player
+  schema "players" do
+    field :name, :string
+    belongs_to :room, BlueSky.Room
 
     timestamps
   end
 
-  @required_fields ~w()
+  @required_fields ~w(name)
   @optional_fields ~w()
 
   @doc """
