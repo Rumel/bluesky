@@ -9,6 +9,8 @@ defmodule BlueSky.Question do
     field :d, :string
     field :answer, :string
 
+    has_many :guesses, BlueSky.Guess
+
     timestamps
   end
 

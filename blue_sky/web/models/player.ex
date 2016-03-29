@@ -3,6 +3,9 @@ defmodule BlueSky.Player do
 
   schema "players" do
     field :name, :string
+
+    has_many :gueses, BlueSky.Guess
+
     belongs_to :room, BlueSky.Room
 
     timestamps
