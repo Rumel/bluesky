@@ -34,6 +34,8 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :blue_sky, BlueSky.Repo,
+  username: "bluesky",
+  password: "bluesky",
   adapter: Ecto.Adapters.Postgres,
   database: "blue_sky_dev",
   hostname: "localhost",

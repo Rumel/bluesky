@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :blue_sky, BlueSky.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "bluesky",
+  password: "bluesky",
   database: "blue_sky_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
