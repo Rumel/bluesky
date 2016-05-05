@@ -1,6 +1,8 @@
 defmodule BlueSky.Room do
   use BlueSky.Web, :model
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+
   schema "rooms" do
     has_many :players, BlueSky.Player
     has_many :guesses, BlueSky.Guess

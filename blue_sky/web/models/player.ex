@@ -4,9 +4,9 @@ defmodule BlueSky.Player do
   schema "players" do
     field :name, :string
 
-    has_many :gueses, BlueSky.Guess
+    has_many :guesses, BlueSky.Guess
 
-    belongs_to :room, BlueSky.Room
+    belongs_to :room, BlueSky.Room, type: :binary_id
 
     timestamps
   end
