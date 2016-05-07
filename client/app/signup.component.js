@@ -9,9 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var player_1 = require('./player');
 var SignUpComponent = (function () {
     function SignUpComponent() {
     }
+    SignUpComponent.prototype.ngOnInit = function () {
+        this.player = new player_1.Player();
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', player_1.Player)
+    ], SignUpComponent.prototype, "player", void 0);
     SignUpComponent = __decorate([
         core_1.Component({
             selector: 'signup',

@@ -10,14 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var trivia_service_1 = require('./trivia.service');
+var question_1 = require('./question');
 var QuestionComponent = (function () {
     function QuestionComponent(triviaService) {
         this.triviaService = triviaService;
     }
     QuestionComponent.prototype.ngOnInit = function () {
         var _this = this;
-        // this.question = new Question();
-        // this.question.order = 1;
+        this.question = new question_1.Question();
         this.triviaService.getQuestion().then(function (question) { return _this.question = question; });
     };
     QuestionComponent = __decorate([

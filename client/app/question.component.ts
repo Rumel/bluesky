@@ -15,8 +15,7 @@ export class QuestionComponent implements OnInit {
     
     
     ngOnInit() {
-        // this.question = new Question();
-        // this.question.order = 1;
+        this.question = new Question();
         this.triviaService.getQuestion().then(question => this.question = question);
     }
 }
