@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var player_1 = require('./player');
+var player_1 = require('../models/player');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var SignUpComponent = (function () {
     function SignUpComponent(_router) {
@@ -28,7 +28,7 @@ var SignUpComponent = (function () {
     SignUpComponent = __decorate([
         core_1.Component({
             selector: 'signup',
-            templateUrl: './app/signup.html'
+            templateUrl: './app/views/signup.html'
         }), 
         __metadata('design:paramtypes', [router_deprecated_1.Router])
     ], SignUpComponent);

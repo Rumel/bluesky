@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var trivia_service_1 = require('./trivia.service');
-var question_1 = require('./question');
-var answer_1 = require('./answer');
+var trivia_service_1 = require('../services/trivia.service');
+var question_1 = require('../models/question');
+var answer_1 = require('../models/answer');
 var ResultComponent = (function () {
     function ResultComponent(_router, _routeParams, triviaService) {
         this._router = _router;
@@ -40,7 +40,7 @@ var ResultComponent = (function () {
     ResultComponent = __decorate([
         core_1.Component({
             selector: 'result',
-            templateUrl: './app/result.html'
+            templateUrl: './app/views/result.html'
         }), 
         __metadata('design:paramtypes', [router_deprecated_1.Router, router_deprecated_1.RouteParams, trivia_service_1.TriviaService])
     ], ResultComponent);

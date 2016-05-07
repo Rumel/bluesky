@@ -1,4 +1,4 @@
-import { Question } from './question';
+import { Question } from '../models/question';
 export var QUESTION: Question = 
     {
         "id": 1, 

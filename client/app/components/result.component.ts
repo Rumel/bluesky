@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouteParams } from '@angular/router-deprecated';
-import { TriviaService } from './trivia.service';
-import { Question } from './question';
-import { Answer } from './answer';
+import { TriviaService } from '../services/trivia.service';
+import { Question } from '../models/question';
+import { Answer } from '../models/answer';
 
 @Component({
   selector: 'result',
-  templateUrl: './app/result.html'
+  templateUrl: './app/views/result.html'
 })
 export class ResultComponent implements OnInit {
     result: Question;

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Player } from './player';
+import { Player } from '../models/player';
 import { Router } from '@angular/router-deprecated';
 
 @Component({
   selector: 'signup',
-  templateUrl: './app/signup.html'
+  templateUrl: './app/views/signup.html'
 })
 export class SignUpComponent implements OnInit {
     @Input()
