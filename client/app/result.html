@@ -1,0 +1,9 @@
+<div>
+    <h2>Question Number {{result.order}}</h2>
+    <div>
+        <h3>{{result.text}}</h3>
+    </div>
+    <div *ngIf="result && result.answers && result.answers[0]">
+        You chose: {{result.answers[0].selector}}. {{result.answers[0].text}}
+    </div>
+</div>

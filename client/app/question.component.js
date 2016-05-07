@@ -9,12 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_deprecated_1 = require('@angular/router-deprecated');
 var trivia_service_1 = require('./trivia.service');
 var question_1 = require('./question');
 var QuestionComponent = (function () {
-    function QuestionComponent(triviaService) {
+    function QuestionComponent(triviaService, _router) {
         this.triviaService = triviaService;
+        this._router = _router;
     }
+    QuestionComponent.prototype.answerSelected = function (question, answer) {
+        this._router.navigate(['Result', { question: question, answer: answer }]);
+    };
     QuestionComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.question = new question_1.Question();
@@ -25,7 +30,7 @@ var QuestionComponent = (function () {
             selector: 'question',
             templateUrl: './app/question.html'
         }), 
-        __metadata('design:paramtypes', [trivia_service_1.TriviaService])
+        __metadata('design:paramtypes', [trivia_service_1.TriviaService, router_deprecated_1.Router])
     ], QuestionComponent);
     return QuestionComponent;
 }());

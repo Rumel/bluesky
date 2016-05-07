@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var signup_component_1 = require('./signup.component');
 var question_component_1 = require('./question.component');
+var result_component_1 = require('./result.component');
 var trivia_service_1 = require('./trivia.service');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var AppComponent = (function () {
@@ -34,6 +35,11 @@ var AppComponent = (function () {
                 path: '/question',
                 name: 'Question',
                 component: question_component_1.QuestionComponent
+            },
+            {
+                path: '/result/:question/:answer',
+                name: 'Result',
+                component: result_component_1.ResultComponent
             }
         ]), 
         __metadata('design:paramtypes', [trivia_service_1.TriviaService])

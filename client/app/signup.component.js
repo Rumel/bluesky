@@ -10,9 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var player_1 = require('./player');
+var router_deprecated_1 = require('@angular/router-deprecated');
 var SignUpComponent = (function () {
-    function SignUpComponent() {
+    function SignUpComponent(_router) {
+        this._router = _router;
     }
+    SignUpComponent.prototype.letsPlay = function () {
+        this._router.navigate(['Question']);
+    };
     SignUpComponent.prototype.ngOnInit = function () {
         this.player = new player_1.Player();
     };
@@ -25,7 +30,7 @@ var SignUpComponent = (function () {
             selector: 'signup',
             templateUrl: './app/signup.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_deprecated_1.Router])
     ], SignUpComponent);
     return SignUpComponent;
 }());

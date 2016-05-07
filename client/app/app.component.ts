@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SignUpComponent } from './signup.component';
 import { QuestionComponent } from './question.component';
+import { ResultComponent } from './result.component';
 import { TriviaService } from './trivia.service';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
@@ -20,6 +21,11 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
     path: '/question',
     name: 'Question',
     component: QuestionComponent
+  },
+  {
+    path: '/result/:question/:answer',
+    name: 'Result',
+    component: ResultComponent
   }
 ])
 
