@@ -20,6 +20,7 @@ defmodule BlueSky.GameService do
     Repo.get(Room, room_id)
   end
 
+  def add_player(%Room{id: room_id}), do: add_player(room_id)
   def add_player(room_id) do
     room = get_room(room_id)
 
@@ -46,7 +47,13 @@ defmodule BlueSky.GameService do
     end
   end
 
+  def get_players(%Room{id: room_id}), do: get_players(room_id)
   def get_players(room_id) do
+    query = from p in Player,
+            where: p.room_id == ^room_id,
+            select: p
+
+    Repo.all(query)
   end
 
   def get_question(room_id) do
