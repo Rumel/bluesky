@@ -13,17 +13,19 @@ var signup_component_1 = require('./signup.component');
 var question_component_1 = require('./question.component');
 var result_component_1 = require('./result.component');
 var trivia_service_1 = require('../services/trivia.service');
+var signup_service_1 = require('../services/signup.service');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var AppComponent = (function () {
-    function AppComponent(triviaService) {
+    function AppComponent(triviaService, signUpService) {
         this.triviaService = triviaService;
+        this.signUpService = signUpService;
     }
     AppComponent = __decorate([
         core_1.Component({
             selector: 'content',
             templateUrl: './app/views/app.html',
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
-            providers: [router_deprecated_1.ROUTER_PROVIDERS, trivia_service_1.TriviaService]
+            providers: [router_deprecated_1.ROUTER_PROVIDERS, trivia_service_1.TriviaService, signup_service_1.SignUpService]
         }),
         router_deprecated_1.RouteConfig([
             {
@@ -32,7 +34,7 @@ var AppComponent = (function () {
                 component: signup_component_1.SignUpComponent
             },
             {
-                path: '/question',
+                path: '/question/:playerid',
                 name: 'Question',
                 component: question_component_1.QuestionComponent
             },
@@ -42,7 +44,7 @@ var AppComponent = (function () {
                 component: result_component_1.ResultComponent
             }
         ]), 
-        __metadata('design:paramtypes', [trivia_service_1.TriviaService])
+        __metadata('design:paramtypes', [trivia_service_1.TriviaService, signup_service_1.SignUpService])
     ], AppComponent);
     return AppComponent;
 }());

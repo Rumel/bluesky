@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Player } from '../models/player';
 import { Router } from '@angular/router-deprecated';
+import { Player } from '../models/player';
+import { SignUpService } from '../services/signup.service';
 
 @Component({
   selector: 'signup',
@@ -10,10 +11,11 @@ export class SignUpComponent implements OnInit {
     @Input()
     player: Player;
     
-    constructor(private _router: Router) {}
+    constructor(private _router: Router, private _signUpService: SignUpService) {}
     
     letsPlay() {
-        this._router.navigate(['Question']);
+        this._signUpService.signUp(this.player.name)
+                            .then(playerid => this._router.navigate(['Question', { playerid: playerid }]));
     }
     
     ngOnInit() {
