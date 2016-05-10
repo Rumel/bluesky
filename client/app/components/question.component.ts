@@ -3,6 +3,7 @@ import { Router, RouteParams } from '@angular/router-deprecated';
 import { OnInit } from '@angular/core';
 import { TriviaService } from '../services/trivia.service';
 import { Question } from '../models/question';
+import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'question',
@@ -12,7 +13,7 @@ export class QuestionComponent implements OnInit {
     question: Question;
     playerid: string;
     
-    constructor(private triviaService: TriviaService, private _router: Router, , private _routeParams: RouteParams) { }
+    constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService) { }
     
     answerSelected(question: number, answer: string) {
         this._router.navigate(['Result', {question: question, answer: answer}]);
@@ -20,7 +21,7 @@ export class QuestionComponent implements OnInit {
     
     ngOnInit() {
         this.question = new Question();
-        this.playerid = this._routeParams.get('playerid');
+        this.playerid = this._playerService.getPlayerId();
         this.triviaService.getQuestion().then(question => this.question = question);
     }
 }

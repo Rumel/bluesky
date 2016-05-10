@@ -12,15 +12,20 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var player_1 = require('../models/player');
 var signup_service_1 = require('../services/signup.service');
+var player_service_1 = require('../services/player.service');
 var SignUpComponent = (function () {
-    function SignUpComponent(_router, _signUpService) {
+    function SignUpComponent(_router, _signUpService, _playerService) {
         this._router = _router;
         this._signUpService = _signUpService;
+        this._playerService = _playerService;
     }
     SignUpComponent.prototype.letsPlay = function () {
         var _this = this;
         this._signUpService.signUp(this.player.name)
-            .then(function (playerid) { return _this._router.navigate(['Question', { playerid: playerid }]); });
+            .then(function (playerid) {
+            _this._playerService.setPlayerId(playerid);
+            _this._router.navigate(['Question']);
+        });
     };
     SignUpComponent.prototype.ngOnInit = function () {
         this.player = new player_1.Player();
@@ -34,7 +39,7 @@ var SignUpComponent = (function () {
             selector: 'signup',
             templateUrl: './app/views/signup.html'
         }), 
-        __metadata('design:paramtypes', [router_deprecated_1.Router, signup_service_1.SignUpService])
+        __metadata('design:paramtypes', [router_deprecated_1.Router, signup_service_1.SignUpService, player_service_1.PlayerService])
     ], SignUpComponent);
     return SignUpComponent;
 }());

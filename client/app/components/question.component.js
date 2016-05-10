@@ -12,11 +12,13 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var trivia_service_1 = require('../services/trivia.service');
 var question_1 = require('../models/question');
+var player_service_1 = require('../services/player.service');
 var QuestionComponent = (function () {
-    function QuestionComponent(triviaService, _router, _routeParams) {
+    function QuestionComponent(triviaService, _router, _routeParams, _playerService) {
         this.triviaService = triviaService;
         this._router = _router;
         this._routeParams = _routeParams;
+        this._playerService = _playerService;
     }
     QuestionComponent.prototype.answerSelected = function (question, answer) {
         this._router.navigate(['Result', { question: question, answer: answer }]);
@@ -24,7 +26,7 @@ var QuestionComponent = (function () {
     QuestionComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.question = new question_1.Question();
-        this.playerid = this._routeParams.get('playerid');
+        this.playerid = this._playerService.getPlayerId();
         this.triviaService.getQuestion().then(function (question) { return _this.question = question; });
     };
     QuestionComponent = __decorate([
@@ -32,7 +34,7 @@ var QuestionComponent = (function () {
             selector: 'question',
             templateUrl: './app/views/question.html'
         }), 
-        __metadata('design:paramtypes', [trivia_service_1.TriviaService, router_deprecated_1.Router, router_deprecated_1.RouteParams])
+        __metadata('design:paramtypes', [trivia_service_1.TriviaService, router_deprecated_1.Router, router_deprecated_1.RouteParams, player_service_1.PlayerService])
     ], QuestionComponent);
     return QuestionComponent;
 }());
