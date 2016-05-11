@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
+import { NgForm }    from '@angular/common';
 import { Player } from '../models/player';
 import { SignUpService } from '../services/signup.service';
 import { PlayerService } from '../services/player.service';
@@ -14,7 +15,7 @@ export class SignUpComponent implements OnInit {
     
     constructor(private _router: Router, private _signUpService: SignUpService, private _playerService: PlayerService) {}
     
-    letsPlay() {
+    onSubmit() {
         this._signUpService.signUp(this.player.name)
                             .then(playerid => {
                                 this._playerService.setPlayerId(playerid);

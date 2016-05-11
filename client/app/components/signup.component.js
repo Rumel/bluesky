@@ -19,7 +19,7 @@ var SignUpComponent = (function () {
         this._signUpService = _signUpService;
         this._playerService = _playerService;
     }
-    SignUpComponent.prototype.letsPlay = function () {
+    SignUpComponent.prototype.onSubmit = function () {
         var _this = this;
         this._signUpService.signUp(this.player.name)
             .then(function (playerid) {

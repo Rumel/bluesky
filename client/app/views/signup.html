@@ -1,4 +1,13 @@
-<div>
-    <input type="text" [(ngModel)]="player.name" placeholder="Name" />
-    <button (click)="letsPlay()">Let's Play!</button>
-</div>
+<form (ngSubmit)="onSubmit()" #signUpForm="ngForm">
+    <div class="form-group">
+        <input  type="text" 
+                [(ngModel)]="player.name" 
+                ngControl="playerName" 
+                placeholder="Name" 
+                class="form-control" 
+                #playerName="ngForm" 
+                required />
+
+        <button type="submit" [disabled]="!signUpForm.valid">Let's Play!</button>
+    </div>
+</form>
