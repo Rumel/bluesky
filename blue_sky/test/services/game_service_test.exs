@@ -45,4 +45,14 @@ defmodule BlueSky.GameServiceTest do
 
     assert Repo.all(query) |> length == 0
   end
+
+  test "getting all players" do
+    room = GameService.new_room
+    player_a = GameService.add_player(room)
+    player_b = GameService.add_player(room)
+
+    players = GameService.get_players(room)
+
+    assert length(players) == 2
+  end
 end
