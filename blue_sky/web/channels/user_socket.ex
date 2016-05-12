@@ -3,6 +3,7 @@ defmodule BlueSky.UserSocket do
 
   ## Channels
   # channel "rooms:*", BlueSky.RoomChannel
+  channel "test:*", BlueSky.TestChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
