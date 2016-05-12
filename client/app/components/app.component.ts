@@ -3,13 +3,15 @@ import { SignUpComponent } from './signup.component';
 import { QuestionComponent } from './question.component';
 import { ResultComponent } from './result.component';
 import { TriviaService } from '../services/trivia.service';
+import { SignUpService } from '../services/signup.service';
+import { PlayerService } from '../services/player.service';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
 @Component({
   selector: 'content',
   templateUrl: './app/views/app.html',
   directives: [ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, TriviaService]
+  providers: [ROUTER_PROVIDERS, TriviaService, SignUpService, PlayerService]
 })
 @RouteConfig([
   {
@@ -18,7 +20,7 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
     component: SignUpComponent
   },
   {
-    path: '/question',
+    path: '/question/',
     name: 'Question',
     component: QuestionComponent
   },
@@ -30,5 +32,5 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
 ])
 
 export class AppComponent {
-    constructor(private triviaService: TriviaService) { }
+    constructor(private triviaService: TriviaService, private signUpService: SignUpService) { }
  }
