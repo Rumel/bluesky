@@ -4,6 +4,7 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.Player
   alias BlueSky.Room
+  alias BlueSky.Question
 
   import Ecto.Query
 
@@ -64,6 +65,14 @@ defmodule BlueSky.GameService do
     # Get already asked questions
 
     # Get new random question not in asked questions
+  end
+
+  def get_random_question() do
+    query = from q in Question,
+            order_by: fragment("RANDOM()"),
+            limit: 1
+
+    Repo.one(query)
   end
 
   def answer_question(room_id, question_id, answer) do

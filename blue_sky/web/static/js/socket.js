@@ -87,6 +87,10 @@ channel.on("new_room", payload => {
   console.log("rooms-new room", rooms)
 })
 
+channel.on("new_question", payload => {
+  console.log("new question", payload)
+})
+
 channel.join()
   .receive("ok", resp => { 
     console.log("Joined successfully", resp) 
