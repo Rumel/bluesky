@@ -13,7 +13,9 @@ defmodule BlueSky do
       supervisor(BlueSky.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(BlueSky.Worker, [arg1, arg2, arg3]),
+      worker(BlueSky.UpdateQuestions,[]),
     ]
+
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
