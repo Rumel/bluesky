@@ -34,3 +34,12 @@
     </ul>
   </div>
 </div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <div id="messages"></div>
+    <label for="chat-input">Message: </label>
+    <input id="chat-input" type="text"></input>
+  </div>
+</div>
