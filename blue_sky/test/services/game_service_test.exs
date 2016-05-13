@@ -22,6 +22,16 @@ defmodule BlueSky.GameServiceTest do
     assert room == other_room
   end
 
+  test "getting all rooms" do
+    room = GameService.new_room
+    room2 = GameService.new_room
+
+    rooms = GameService.get_rooms
+
+    assert Enum.any?(rooms, fn(x) -> x.id == room.id end)
+    assert Enum.any?(rooms, fn(x) -> x.id == room2.id end)
+  end
+
   test "adding a player" do
     room = GameService.new_room
     player = GameService.add_player(room.id)

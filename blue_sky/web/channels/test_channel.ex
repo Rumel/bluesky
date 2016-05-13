@@ -1,6 +1,10 @@
 defmodule BlueSky.TestChannel do
   use Phoenix.Channel
 
+  alias BlueSky.GameService
+  alias BlueSky.Player
+  alias BlueSky.Repo
+
   # Documentation
   # http://www.phoenixframework.org/docs/channels
   
@@ -18,7 +22,25 @@ defmodule BlueSky.TestChannel do
     {:noreply, socket}
   end
 
-  
+
+  def handle_in("new_room", %{"body" => body}, socket) do
+    room = GameService.new_room
+    broadcast! socket, "new_room", %{body: room.id}
+    {:noreply, socket}
+  end
+
+  def handle_in("get_rooms", %{"body" => body}, socket) do
+    rooms = GameService.get_rooms
+            |> Enum.map(&(Map.take(&1, [:id])))
+
+    #How do I do custom encoders?
+    #http://www.cultivatehq.com/posts/serialisation-of-ecto-models-in-phoenix-channels-and-views/
+
+    rooms_mapped = Enum.map(rooms, fn(x) ->  end)
+    broadcast! socket, "rooms_list", %{rooms: rooms}
+    {:noreply, socket}
+  end
+
 
   def join("test:test", _params, socket) do
      {:ok, %{ data: "Connected", socket: socket}}

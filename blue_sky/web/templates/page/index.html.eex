@@ -41,5 +41,6 @@
     <div id="messages"></div>
     <label for="chat-input">Message: </label>
     <input id="chat-input" type="text"></input>
+    <button id="newRoom">New Room</button>
   </div>
 </div>

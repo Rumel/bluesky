@@ -20,6 +20,10 @@ defmodule BlueSky.GameService do
     Repo.get(Room, room_id)
   end
 
+  def get_rooms() do
+    Repo.all(Room)
+  end
+
   def add_player(%Room{id: room_id}), do: add_player(room_id)
   def add_player(room_id) do
     room = get_room(room_id)
