@@ -8,16 +8,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var phoenix_js_1 = require("phoenix_js");
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var player_1 = require('../models/player');
 var signup_service_1 = require('../services/signup.service');
 var player_service_1 = require('../services/player.service');
 var SignUpComponent = (function () {
-    function SignUpComponent(_router, _signUpService, _playerService) {
+    function SignUpComponent(_router, _signUpService, _playerService, _socket) {
         this._router = _router;
         this._signUpService = _signUpService;
         this._playerService = _playerService;
+        this._socket = _socket;
     }
     SignUpComponent.prototype.onSubmit = function () {
         var _this = this;
@@ -29,6 +31,8 @@ var SignUpComponent = (function () {
     };
     SignUpComponent.prototype.ngOnInit = function () {
         this.player = new player_1.Player();
+        //this._socket.connect();
+        //this._soc.connect();
     };
     __decorate([
         core_1.Input(), 
@@ -39,7 +43,7 @@ var SignUpComponent = (function () {
             selector: 'signup',
             templateUrl: './app/views/signup.html'
         }), 
-        __metadata('design:paramtypes', [router_deprecated_1.Router, signup_service_1.SignUpService, player_service_1.PlayerService])
+        __metadata('design:paramtypes', [router_deprecated_1.Router, signup_service_1.SignUpService, player_service_1.PlayerService, phoenix_js_1.Socket])
     ], SignUpComponent);
     return SignUpComponent;
 }());
