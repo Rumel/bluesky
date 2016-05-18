@@ -31,19 +31,20 @@ defmodule BlueSky.TestChannel do
 
   def handle_in("get_rooms", %{"body" => body}, socket) do
     rooms = GameService.get_rooms
-            |> Enum.map(&(Map.take(&1, [:id])))
+            |> Enum.map(fn (x) -> x.id end)
+
+    IO.inspect rooms
 
     #How do I do custom encoders?
     #http://www.cultivatehq.com/posts/serialisation-of-ecto-models-in-phoenix-channels-and-views/
 
-    rooms_mapped = Enum.map(rooms, fn(x) ->  end)
-    broadcast! socket, "rooms_list", %{rooms: rooms}
+    broadcast! socket, "rooms_list", %{ rooms: rooms }
     {:noreply, socket}
   end
 
 
   def join("test:test", _params, socket) do
-     {:ok, %{ data: "Connected", socket: socket}}
+     {:ok, %{ data: "Connected", socket: socket }}
   end
 
   def join("test:" <> thing, _params, socket) do

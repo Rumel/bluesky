@@ -65,4 +65,10 @@ defmodule BlueSky.GameServiceTest do
 
     assert length(players) == 2
   end
+
+  test "getting a random question" do
+    question = GameService.get_random_question
+
+    assert question != nil
+  end
 end

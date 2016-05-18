@@ -13,6 +13,8 @@
 alias BlueSky.Repo
 alias BlueSky.Question
 
+Repo.delete_all(Question)
+
 Repo.insert!(%Question{
   question: "What is the capital of Nebraska?",
   a: "Lincoln",

@@ -82,9 +82,13 @@ channel.on("rooms_list", payload => {
 })
 
 channel.on("new_room", payload => {
-  rooms.push({ id: payload.body })
+  rooms.push(payload.body)
 
   console.log("rooms-new room", rooms)
+})
+
+channel.on("new_question", payload => {
+  console.log("new question", payload)
 })
 
 channel.join()
