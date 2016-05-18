@@ -27,7 +27,20 @@ export class SignUpComponent implements OnInit {
     
     ngOnInit() {
         this.player = new Player();
-        //this._socket.connect();
-        //this._soc.connect();
+        this._socket.connect();
+        
+        let channel = this._socket.channel("test:lobby");
+        
+        // channel.on("new_msg", msg => this.player.name = msg.body);
+        channel.on("new_msg", msg => console.log('received ', msg));
+        channel.on("new_question", msg => console.log('received ', msg));
+        
+        channel.onError(e => console.log('error', e));
+        channel.onClose(c => console.log('closed'));
+        channel.join();
+        console.log('joined channel');
+        channel.push("new_msg", {body: 'testbob'});          
+        
+        
     }
 }

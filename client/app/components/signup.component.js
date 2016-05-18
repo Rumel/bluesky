@@ -31,8 +31,16 @@ var SignUpComponent = (function () {
     };
     SignUpComponent.prototype.ngOnInit = function () {
         this.player = new player_1.Player();
-        //this._socket.connect();
-        //this._soc.connect();
+        this._socket.connect();
+        var channel = this._socket.channel("test:lobby");
+        // channel.on("new_msg", msg => this.player.name = msg.body);
+        channel.on("new_msg", function (msg) { return console.log('received ', msg); });
+        channel.on("new_question", function (msg) { return console.log('received ', msg); });
+        channel.onError(function (e) { return console.log('error', e); });
+        channel.onClose(function (c) { return console.log('closed'); });
+        channel.join();
+        console.log('joined channel');
+        channel.push("new_msg", { body: 'testbob' });
     };
     __decorate([
         core_1.Input(), 
