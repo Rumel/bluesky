@@ -21,20 +21,20 @@ export class ResultComponent implements OnInit {
                     this.result = new Question();
 this.result.answers = new Array<Answer>();
         
-        this.triviaService.getQuestion().then(question => {
-            let questionid = this._routeParams.get('question');
-            let answer = this._routeParams.get('answer');
+        // this.triviaService.getQuestion().then(question => {
+        //     let questionid = this._routeParams.get('question');
+        //     let answer = this._routeParams.get('answer');
             
-            var selectedAnswer = new Answer();
-            question.answers.forEach(x => {
-                if(x.selector === answer) {
-                  this.result.answers.push(x);
-                }
-            });
+        //     var selectedAnswer = new Answer();
+        //     question.answers.forEach(x => {
+        //         if(x.selector === answer) {
+        //           this.result.answers.push(x);
+        //         }
+        //     });
 
-            this.result.answers.push(selectedAnswer);
-            this.result.order = question.order;
-            this.result.text = question.text;
-        });
+        //     this.result.answers.push(selectedAnswer);
+        //     this.result.order = question.order;
+        //     this.result.text = question.text;
+        // });
     }
 }

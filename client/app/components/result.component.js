@@ -12,7 +12,6 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var trivia_service_1 = require('../services/trivia.service');
 var question_1 = require('../models/question');
-var answer_1 = require('../models/answer');
 var ResultComponent = (function () {
     function ResultComponent(_router, _routeParams, triviaService) {
         this._router = _router;
@@ -20,22 +19,21 @@ var ResultComponent = (function () {
         this.triviaService = triviaService;
     }
     ResultComponent.prototype.ngOnInit = function () {
-        var _this = this;
         this.result = new question_1.Question();
         this.result.answers = new Array();
-        this.triviaService.getQuestion().then(function (question) {
-            var questionid = _this._routeParams.get('question');
-            var answer = _this._routeParams.get('answer');
-            var selectedAnswer = new answer_1.Answer();
-            question.answers.forEach(function (x) {
-                if (x.selector === answer) {
-                    _this.result.answers.push(x);
-                }
-            });
-            _this.result.answers.push(selectedAnswer);
-            _this.result.order = question.order;
-            _this.result.text = question.text;
-        });
+        // this.triviaService.getQuestion().then(question => {
+        //     let questionid = this._routeParams.get('question');
+        //     let answer = this._routeParams.get('answer');
+        //     var selectedAnswer = new Answer();
+        //     question.answers.forEach(x => {
+        //         if(x.selector === answer) {
+        //           this.result.answers.push(x);
+        //         }
+        //     });
+        //     this.result.answers.push(selectedAnswer);
+        //     this.result.order = question.order;
+        //     this.result.text = question.text;
+        // });
     };
     ResultComponent = __decorate([
         core_1.Component({
