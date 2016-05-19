@@ -19,3 +19,55 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 import socket from "./socket"
+
+socket.connect()
+
+// Now that you are connected, you can join channels with a topic:
+let channel = socket.channel("test:lobby", {})
+let chatInput         = $("#chat-input")
+let messagesContainer = $("#messages")
+let newRoomButton = $("#newRoom")
+let rooms = []
+
+chatInput.on("keypress", event => {
+  if(event.keyCode === 13){
+    channel.push("new_msg", {body: chatInput.val()})
+    chatInput.val("")
+  }
+})
+
+newRoomButton.on("click", event => {
+  channel.push("new_room", {body: "test"})
+})
+
+channel.on("new_msg", payload => {
+  messagesContainer.append(`<br/>[${Date()}] ${payload.body}`)
+})
+
+channel.on("rooms_list", payload => {
+  rooms = payload.rooms
+
+  console.log("rooms", rooms)
+})
+
+channel.on("new_room", payload => {
+  rooms.push(payload.body)
+
+  console.log("rooms-new room", rooms)
+})
+
+channel.on("new_question", payload => {
+  console.log("new question", payload)
+})
+
+channel.join()
+  .receive("ok", resp => { 
+    console.log("Joined successfully", resp) 
+
+    channel.push("get_rooms", {body: "test"})
+  })
+  .receive("error", resp => { console.log("Unable to join", resp) })
+
+window.sendChannelMessage = function (messageType, data) {
+  channel.push(messageType, data)
+}
