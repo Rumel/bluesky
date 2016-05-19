@@ -27,7 +27,7 @@ defmodule BlueSky.UpdateQuestions do
       })
 
     # Start the timer again
-    Process.send_after(self(), :work, 5_000) # In 5 seconds
+    Process.send_after(self(), :work, 30_000) # In 5 seconds
 
     #pass the max_id into the state so we can skip previously seen data in next iteration
     {:noreply, state}#%{"last_id" => max_id}}
