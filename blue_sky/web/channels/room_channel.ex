@@ -1,4 +1,4 @@
-defmodule BlueSky.TestChannel do
+defmodule BlueSky.RoomChannel do
   use Phoenix.Channel
 
   alias BlueSky.GameService
@@ -8,7 +8,7 @@ defmodule BlueSky.TestChannel do
   # Documentation
   # http://www.phoenixframework.org/docs/channels
   
-  def join("test:lobby", _params, socket) do
+  def join("room:join", _params, socket) do
      {:ok, socket}
   end
 

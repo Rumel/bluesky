@@ -23,7 +23,7 @@ import socket from "./socket"
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("test:lobby", {})
+let channel = socket.channel("room:join", {})
 let chatInput         = $("#chat-input")
 let messagesContainer = $("#messages")
 let newRoomButton = $("#newRoom")
