@@ -23,7 +23,7 @@ var SignUpComponent = (function () {
         var _this = this;
         this._signUpService.signUp(this.player.name)
             .then(function (playerid) {
-            _this._playerService.setPlayerId(playerid);
+            _this._playerService.setPlayer(playerid, _this.player.name);
             _this._router.navigate(['Question']);
         });
     };

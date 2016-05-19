@@ -12,12 +12,15 @@ var core_1 = require('@angular/core');
 var PlayerService = (function () {
     function PlayerService() {
     }
-    // Service message commands
-    PlayerService.prototype.setPlayerId = function (id) {
+    PlayerService.prototype.setPlayer = function (id, name) {
         this._playerId = id;
+        this._playerName = name;
     };
     PlayerService.prototype.getPlayerId = function () {
         return this._playerId;
+    };
+    PlayerService.prototype.getPlayerName = function () {
+        return this._playerName;
     };
     PlayerService = __decorate([
         core_1.Injectable(), 

@@ -9,9 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-//import { Http } from '@angular/http';
+var phoenix_js_1 = require('phoenix_js');
 var SignUpService = (function () {
-    function SignUpService() {
+    function SignUpService(_socket) {
+        this._socket = _socket;
     }
     SignUpService.prototype.mockSignUp = function () {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -23,10 +24,11 @@ var SignUpService = (function () {
     };
     SignUpService.prototype.signUp = function (name) {
         return Promise.resolve(this.mockSignUp());
+        // TODO: Need to connect to the socket and get the player id.
     };
     SignUpService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [phoenix_js_1.Socket])
     ], SignUpService);
     return SignUpService;
 }());

@@ -1,4 +1,3 @@
-import { Socket } from "phoenix_js";
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 import { NgForm }    from '@angular/common';
@@ -20,7 +19,7 @@ export class SignUpComponent implements OnInit {
     onSubmit() {
         this._signUpService.signUp(this.player.name)
                             .then(playerid => {
-                                this._playerService.setPlayerId(playerid);
+                                this._playerService.setPlayer(playerid, this.player.name);
                                 this._router.navigate(['Question']);                                
                             });
     }
