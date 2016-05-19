@@ -1,6 +1,9 @@
 <div>
     <h2>Question Number {{question.order}}</h2>
     <div>
+        Remaining Seconds {{remainingSeconds}}
+    </div>
+    <div>
         <h3>{{question.text}}</h3>
     </div>
     <div *ngIf="!isQuestionAnswered">
