@@ -58,4 +58,8 @@ export class TriviaService {
         channel.join();
         console.log('joined channel from service');
     }
+    
+    submitAnswer(question: number, answer: string) {
+        console.log('Submitted ' + answer + ' for question ' + question);
+    }
 }

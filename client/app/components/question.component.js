@@ -20,15 +20,23 @@ var QuestionComponent = (function () {
         this._routeParams = _routeParams;
         this._playerService = _playerService;
     }
-    QuestionComponent.prototype.answerSelected = function (question, answer) {
-        this._router.navigate(['Result', { question: question, answer: answer }]);
+    QuestionComponent.prototype.answerSelected = function (question, selector) {
+        var selectedAnswer = this.question.answers.find(function (x) { return x.selector === selector; });
+        this.selectedAnswerToDisplay = selectedAnswer.selector + ". " + selectedAnswer.text;
+        this.isQuestionAnswered = true;
+        this.triviaService.submitAnswer(question, selector);
+    };
+    QuestionComponent.prototype.handleNextQuestion = function (nextQuestion) {
+        this.question = nextQuestion;
+        this.isQuestionAnswered = false;
     };
     QuestionComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.question = new question_1.Question();
+        this.question.answers = new Array();
         this.playerid = this._playerService.getPlayerId();
-        //this.triviaService.getQuestion().then(question => this.question = question);
-        this.triviaService.question$.subscribe(function (nextQuestion) { return _this.question = nextQuestion; });
+        this.isQuestionAnswered = false;
+        this.triviaService.question$.subscribe(function (nextQuestion) { return _this.handleNextQuestion(nextQuestion); });
         this.triviaService.getQuestions();
     };
     QuestionComponent = __decorate([

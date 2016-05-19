@@ -54,6 +54,9 @@ var TriviaService = (function () {
         channel.join();
         console.log('joined channel from service');
     };
+    TriviaService.prototype.submitAnswer = function (question, answer) {
+        console.log('Submitted ' + answer + ' for question ' + question);
+    };
     TriviaService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [phoenix_js_1.Socket])
