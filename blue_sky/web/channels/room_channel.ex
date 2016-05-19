@@ -12,24 +12,16 @@ defmodule BlueSky.RoomChannel do
      {:ok, socket}
   end
 
-  def handle_in("new_msg", %{"body" => body}, socket) do
-    broadcast! socket, "new_msg", %{body: body}
+  def handle_in("new_room", %{"name" => name} = params, socket) do
+    IO.puts "Name passed in was: #{name}"
+
+    player = GameService.new_room(name)
+
+    broadcast! socket, "new_room", %{ player: player }
     {:noreply, socket}
   end
 
-  def handle_out("new_msg", payload, socket) do
-    push socket, "new_msg", payload
-    {:noreply, socket}
-  end
-
-
-  def handle_in("new_room", %{"body" => body}, socket) do
-    room = GameService.new_room
-    broadcast! socket, "new_room", %{body: room.id}
-    {:noreply, socket}
-  end
-
-  def handle_in("get_rooms", %{"body" => body}, socket) do
+  def handle_in("get_rooms", _params, socket) do
     rooms = GameService.get_rooms
             |> Enum.map(fn (x) -> x.id end)
 
@@ -40,14 +32,5 @@ defmodule BlueSky.RoomChannel do
 
     broadcast! socket, "rooms_list", %{ rooms: rooms }
     {:noreply, socket}
-  end
-
-
-  def join("test:test", _params, socket) do
-     {:ok, %{ data: "Connected", socket: socket }}
-  end
-
-  def join("test:" <> thing, _params, socket) do
-    {:ok, %{data: thing, socket: socket}}
   end
 end

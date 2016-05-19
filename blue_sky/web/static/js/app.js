@@ -24,24 +24,20 @@ socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:join", {})
-let chatInput         = $("#chat-input")
-let messagesContainer = $("#messages")
-let newRoomButton = $("#newRoom")
+let usernameInput = $("#username")
+let createRoomButton = $("#createRoom")
 let rooms = []
 
-chatInput.on("keypress", event => {
+usernameInput.on("keypress", event => {
   if(event.keyCode === 13){
-    channel.push("new_msg", {body: chatInput.val()})
-    chatInput.val("")
+    channel.push("new_room", { name: usernameInput.val() })
+    usernameInput.val("")
   }
 })
 
-newRoomButton.on("click", event => {
-  channel.push("new_room", {body: "test"})
-})
-
-channel.on("new_msg", payload => {
-  messagesContainer.append(`<br/>[${Date()}] ${payload.body}`)
+createRoomButton.on("click", event => {
+  channel.push("new_room", {name: usernameInput.val() })
+  usernameInput.val("")
 })
 
 channel.on("rooms_list", payload => {
@@ -50,8 +46,8 @@ channel.on("rooms_list", payload => {
   console.log("rooms", rooms)
 })
 
-channel.on("new_room", payload => {
-  rooms.push(payload.body)
+channel.on("new_room", data => {
+  rooms.push(data.player.room.id)
 
   console.log("rooms-new room", rooms)
 })
@@ -64,7 +60,7 @@ channel.join()
   .receive("ok", resp => { 
     console.log("Joined successfully", resp) 
 
-    channel.push("get_rooms", {body: "test"})
+    channel.push("get_rooms", {})
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
 

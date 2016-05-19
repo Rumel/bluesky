@@ -12,58 +12,59 @@ defmodule BlueSky.GameServiceTest do
   end
 
   test "creating a new room" do
-    room = GameService.new_room
-    assert room.id != nil
+    player = GameService.new_room("Lemur")
+    assert player.room.id != nil
   end
 
   test "getting a room" do
-    room = GameService.new_room
-    other_room = GameService.get_room(room.id)
-    assert room == other_room
+    player = GameService.new_room("Lemur")
+    other_room = GameService.get_room(player.room.id)
+    assert player.room == other_room
   end
 
   test "getting all rooms" do
-    room = GameService.new_room
-    room2 = GameService.new_room
+    player = GameService.new_room("Lemur One")
+    player_two = GameService.new_room("Lemur Two")
 
     rooms = GameService.get_rooms
 
-    assert Enum.any?(rooms, fn(x) -> x.id == room.id end)
-    assert Enum.any?(rooms, fn(x) -> x.id == room2.id end)
+    assert Enum.any?(rooms, fn(x) -> x.id == player.room.id end)
+    assert Enum.any?(rooms, fn(x) -> x.id == player_two.room.id end)
   end
 
   test "adding a player" do
-    room = GameService.new_room
-    player = GameService.add_player(room.id)
+    player = GameService.new_room("Lemur")
+    player_two = GameService.add_player(player.room.id, "Lemur")
 
-    assert player != nil
-    assert player.room == room
-    assert player.room_id == room.id
+    assert player_two != nil
+    assert player_two.room == player.room
+    assert player_two.room_id == player.room.id
+    assert player_two.name == "Lemur"
   end
 
   test "removing a player" do
-    room = GameService.new_room
-    player = GameService.add_player(room.id)
+    player = GameService.new_room("Lemur")
+    player_two = GameService.add_player(player.room.id, "Lemur")
 
     query = from p in Player,
-            where: p.id == ^player.id,
+            where: p.id == ^player_two.id,
             select: p
 
     assert Repo.all(query) |> length == 1
 
-    GameService.remove_player(player)
+    GameService.remove_player(player_two)
 
     assert Repo.all(query) |> length == 0
   end
 
   test "getting all players" do
-    room = GameService.new_room
-    player_a = GameService.add_player(room)
-    player_b = GameService.add_player(room)
+    player = GameService.new_room("Lemur")
+    player_two = GameService.add_player(player.room, "Lemur One")
+    player_three = GameService.add_player(player.room, "Lemur Two")
 
-    players = GameService.get_players(room)
+    players = GameService.get_players(player.room)
 
-    assert length(players) == 2
+    assert length(players) == 3
   end
 
   test "getting a random question" do

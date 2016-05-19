@@ -38,9 +38,7 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <div id="messages"></div>
-    <label for="chat-input">Message: </label>
-    <input id="chat-input" type="text"></input>
-    <button id="newRoom">New Room</button>
+    <input id="username" type="text" placeholder="Username"></input>
+    <button id="createRoom">Create Room</button>
   </div>
 </div>

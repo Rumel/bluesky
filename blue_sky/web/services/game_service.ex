@@ -8,10 +8,10 @@ defmodule BlueSky.GameService do
 
   import Ecto.Query
 
-  def new_room do
+  def new_room(name) do
     case Repo.insert(%Room{}) do
       {:ok, result} ->
-        result
+        add_player(result, name)
       {:error, error} ->
         error
     end
@@ -25,11 +25,12 @@ defmodule BlueSky.GameService do
     Repo.all(Room)
   end
 
-  def add_player(%Room{id: room_id}), do: add_player(room_id)
-  def add_player(room_id) do
+  def add_player(%Room{id: room_id}, name), do: add_player(room_id, name)
+  def add_player(room_id, name) do
     room = get_room(room_id)
 
     player = Ecto.build_assoc(room, :players)
+    player = %Player{player | name: name}
 
     case Repo.insert(player) do
       {:ok, result} ->
