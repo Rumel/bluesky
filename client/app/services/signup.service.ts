@@ -16,20 +16,18 @@ export class SignUpService {
         this._socket.connect();
         
         let channel = this._socket.channel("room:join");
-        channel.onError(e => {
-            console.log('error', e)
-        });
-        
-        channel.onClose(c => console.log('closed'));
+        channel.onError(e => console.log('Error in room channel in signup.service.', e));        
+        channel.onClose(c => console.log('room channel closed in signup.service.'));
                
         // Set up response for the new player
         channel.on("new_player", newPlayerId => {             
             this._playerId = newPlayerId;
             this._playerIdObserver.next(this._playerId);
+            channel.leave();            
         });
         
         channel.join();
-        console.log('joined channel from service');
+        console.log('Joined room channel from signup.service.');
         
         channel.push("new_room", { "name": name });
     }
