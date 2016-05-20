@@ -10,21 +10,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var phoenix_js_1 = require('phoenix_js');
+var Rx_1 = require('rxjs/Rx');
 var SignUpService = (function () {
     function SignUpService(_socket) {
+        var _this = this;
         this._socket = _socket;
+        this.playerId$ = new Rx_1.Observable(function (observer) { return _this._playerIdObserver = observer; }).share();
     }
-    SignUpService.prototype.mockSignUp = function () {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    };
-    SignUpService.prototype.callSignUpService = function (name) {
-    };
     SignUpService.prototype.signUp = function (name) {
-        return Promise.resolve(this.mockSignUp());
-        // TODO: Need to connect to the socket and get the player id.
+        var _this = this;
+        this._socket.connect();
+        var channel = this._socket.channel("room:join");
+        channel.onError(function (e) {
+            console.log('error', e);
+        });
+        channel.onClose(function (c) { return console.log('closed'); });
+        // Set up response for the new player
+        channel.on("new_player", function (newPlayerId) {
+            _this._playerId = newPlayerId;
+            _this._playerIdObserver.next(_this._playerId);
+        });
+        channel.join();
+        console.log('joined channel from service');
+        channel.push("new_room", { "name": name });
     };
     SignUpService = __decorate([
         core_1.Injectable(), 

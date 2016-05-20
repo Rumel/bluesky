@@ -20,15 +20,16 @@ var SignUpComponent = (function () {
         this._playerService = _playerService;
     }
     SignUpComponent.prototype.onSubmit = function () {
-        var _this = this;
-        this._signUpService.signUp(this.player.name)
-            .then(function (playerid) {
-            _this._playerService.setPlayer(playerid, _this.player.name);
-            _this._router.navigate(['Question']);
-        });
+        this._signUpService.signUp(this.player.name);
+    };
+    SignUpComponent.prototype.setUpPlayer = function (playerid) {
+        this._playerService.setPlayer(playerid, this.player.name);
+        this._router.navigate(['Question']);
     };
     SignUpComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.player = new player_1.Player();
+        this._signUpService.playerId$.subscribe(function (newPlayerId) { return _this.setUpPlayer(newPlayerId); });
     };
     __decorate([
         core_1.Input(), 
