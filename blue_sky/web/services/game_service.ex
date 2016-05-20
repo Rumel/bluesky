@@ -62,13 +62,18 @@ defmodule BlueSky.GameService do
     Repo.all(query)
   end
 
-  def get_question(room_id) do
-    # Get already asked questions
-
-    # Get new random question not in asked questions
+  def get_player(player_id) do
+    Repo.get(Player, player_id)
   end
 
+  def get_question(question_id) do
+    Repo.get(Question, question_id)
+  end
+
+  # Take in room id room_id
   def get_random_question() do
+    # Get already asked questions
+    # Get new random question not in asked questions
     query = from q in Question,
             order_by: fragment("RANDOM()"),
             limit: 1
@@ -76,7 +81,19 @@ defmodule BlueSky.GameService do
     Repo.one(query)
   end
 
-  def answer_question(room_id, question_id, answer) do
+  def answer_question(room_id, question_id, player_id, guess) do
+    room = get_room(room_id)
+    question = get_question(question_id)
+    player = get_player(player_id)
+
+    guess = Ecto.build_assoc(room, :guesses, %{question_id: question.id, player_id: player.id})
+
+    case Repo.insert(guess) do
+      {:ok, result} ->
+        Repo.preload(guess, :player)
+      {:error, error} ->
+        error
+    end
   end
 
   def get_results(room_id, question_id) do

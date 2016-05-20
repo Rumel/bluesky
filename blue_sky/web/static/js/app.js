@@ -26,7 +26,11 @@ socket.connect()
 let channel = socket.channel("room:join", {})
 let usernameInput = $("#username")
 let createRoomButton = $("#createRoom")
+let createGuessButton = $("#createGuess")
 let rooms = []
+let roomId = 0
+let playerId = 0
+let questionId = 0
 
 usernameInput.on("keypress", event => {
   if(event.keyCode === 13){
@@ -40,20 +44,34 @@ createRoomButton.on("click", event => {
   usernameInput.val("")
 })
 
+createGuessButton.on("click", event => {
+  channel.push("new_guess", { player_id: playerId, question_id: questionId, room_id: roomId, guess: "a" })
+  //usernameInput.val("")
+})
+
 channel.on("rooms_list", payload => {
   rooms = payload.rooms
 
   console.log("rooms", rooms)
 })
 
-channel.on("new_room", data => {
-  rooms.push(data.player.room.id)
+channel.on("new_player", data => {
+  rooms.push(data.room_id)
+
+  playerId = data.player_id
+  roomId = data.room_id
 
   console.log("rooms-new room", rooms)
 })
 
 channel.on("new_question", payload => {
   console.log("new question", payload)
+
+  questionId = payload.question.id
+})
+
+channel.on("guessed", payload => {
+  console.log("new guess", payload)
 })
 
 channel.join()

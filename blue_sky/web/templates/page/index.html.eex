@@ -40,5 +40,6 @@
   <div class="col-xs-12">
     <input id="username" type="text" placeholder="Username"></input>
     <button id="createRoom">Create Room</button>
+    <button id="createGuess">Create Guess</button>
   </div>
 </div>
