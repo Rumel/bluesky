@@ -13,7 +13,7 @@ defmodule BlueSky do
       supervisor(BlueSky.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(BlueSky.Worker, [arg1, arg2, arg3]),
-      worker(BlueSky.UpdateQuestions,[]),
+      #worker(BlueSky.UpdateQuestions,[]),
     ]
 
 

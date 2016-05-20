@@ -23,7 +23,7 @@ import socket from "./socket"
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("room:join", {})
+let channel = socket.channel("room:lobby", {})
 let usernameInput = $("#username")
 let createRoomButton = $("#createRoom")
 let createGuessButton = $("#createGuess")
@@ -49,30 +49,34 @@ createGuessButton.on("click", event => {
   //usernameInput.val("")
 })
 
-channel.on("rooms_list", payload => {
-  rooms = payload.rooms
+function bindHandlers() {
+  channel.on("rooms_list", payload => {
+    rooms = payload.rooms
 
-  console.log("rooms", rooms)
-})
+    console.log("rooms", rooms)
+  })
 
-channel.on("new_player", data => {
-  rooms.push(data.room_id)
+  channel.on("new_player", data => {
+    rooms.push(data.room_id)
 
-  playerId = data.player_id
-  roomId = data.room_id
+    playerId = data.player_id
+    roomId = data.room_id
 
-  console.log("rooms-new room", rooms)
-})
+    console.log("rooms-new room", rooms)
+  })
 
-channel.on("new_question", payload => {
-  console.log("new question", payload)
+  channel.on("new_question", payload => {
+    console.log("new question", payload)
 
-  questionId = payload.question_id
-})
+    questionId = payload.question_id
+  })
 
-channel.on("guessed", payload => {
-  console.log("new guess", payload)
-})
+  channel.on("guessed", payload => {
+    console.log("new guess", payload)
+  })
+}
+
+bindHandlers()
 
 channel.join()
   .receive("ok", resp => { 
@@ -87,4 +91,14 @@ channel.join()
 
 window.sendChannelMessage = function (messageType, data) {
   channel.push(messageType, data)
+}
+
+window.joinPrivateRoom = function (roomId, playerName) {
+  channel = socket.channel("room:" + roomId, { name: playerName })
+
+  channel.join().receive("ok", resp => {
+    console.log("joined private room", resp)
+  })
+
+  bindHandlers()
 }

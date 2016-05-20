@@ -8,8 +8,20 @@ defmodule BlueSky.RoomChannel do
   # Documentation
   # http://www.phoenixframework.org/docs/channels
   
-  def join("room:join", _params, socket) do
+  def join("room:lobby", _params, socket) do
      {:ok, socket}
+  end
+
+  def join("room:" <> _private_room_id, %{"name" => name} = params, socket) do
+    IO.puts "Name passed in was: #{name}"
+
+    room = GameService.get_room(_private_room_id)
+
+    player = GameService.add_player(_private_room_id, name)
+
+    socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room.id })
+
+    {:ok, %{ player_id: player.id, room_id: room.id }, socket}
   end
 
   def handle_in("new_room", %{"name" => name} = params, socket) do
