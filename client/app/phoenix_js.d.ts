@@ -15,5 +15,6 @@ declare module "phoenix_js" {
     on(event: any, callback: any): void;
     onMessage(event: any, payload: any, ref: any): void;
     push(event: any, payload: any): void;
+    leave(): void;
   }
 }

@@ -21,17 +21,16 @@ var SignUpService = (function () {
         var _this = this;
         this._socket.connect();
         var channel = this._socket.channel("room:join");
-        channel.onError(function (e) {
-            console.log('error', e);
-        });
-        channel.onClose(function (c) { return console.log('closed'); });
+        channel.onError(function (e) { return console.log('Error in room channel in signup.service.', e); });
+        channel.onClose(function (c) { return console.log('room channel closed in signup.service.'); });
         // Set up response for the new player
         channel.on("new_player", function (newPlayerId) {
             _this._playerId = newPlayerId;
             _this._playerIdObserver.next(_this._playerId);
+            channel.leave();
         });
         channel.join();
-        console.log('joined channel from service');
+        console.log('Joined room channel from signup.service.');
         channel.push("new_room", { "name": name });
     };
     SignUpService = __decorate([
