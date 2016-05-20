@@ -28,20 +28,26 @@ var QuestionComponent = (function () {
     };
     QuestionComponent.prototype.handleNextQuestion = function (nextQuestion) {
         var _this = this;
+        // Reset the countdown.
         clearInterval(this._countdownTimer);
-        this.question = nextQuestion;
         this.remainingSeconds = 30;
+        this.question = nextQuestion;
+        // Switch back to the question view.
         this.isQuestionAnswered = false;
+        // Kick off the countdown.
         this._countdownTimer = setInterval(function () { return _this.remainingSeconds--; }, 1000);
     };
     QuestionComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.question = new question_1.Question();
         this.question.answers = new Array();
-        this.playerid = this._playerService.getPlayerId();
+        this._playerId = this._playerService.getPlayerId();
+        this.playerName = this._playerService.getPlayerName();
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
+        // Subscribe to the observable.
         this.triviaService.question$.subscribe(function (nextQuestion) { return _this.handleNextQuestion(nextQuestion); });
+        // Initiate the subscription.
         this.triviaService.getQuestions();
     };
     QuestionComponent = __decorate([

@@ -12,10 +12,12 @@ import { PlayerService } from '../services/player.service';
 })
 export class QuestionComponent implements OnInit {
     question: Question;
-    playerid: string;    
+    playerName: string;    
     selectedAnswerToDisplay: string;
     isQuestionAnswered: boolean;
     remainingSeconds: number;
+    
+    private _playerId: string;
     
     private _countdownTimer: any;
     
@@ -30,21 +32,31 @@ export class QuestionComponent implements OnInit {
     }
     
     private handleNextQuestion(nextQuestion: Question) {
+        // Reset the countdown.
         clearInterval(this._countdownTimer);
-        this.question = nextQuestion;
         this.remainingSeconds = 30;
+                
+        this.question = nextQuestion;
+        
+        // Switch back to the question view.
         this.isQuestionAnswered = false;
+        
+        // Kick off the countdown.
         this._countdownTimer = setInterval(() => this.remainingSeconds--, 1000);             
     }
     
     ngOnInit() {
         this.question = new Question();
         this.question.answers = new Array<Answer>();
-        this.playerid = this._playerService.getPlayerId();
+        this._playerId = this._playerService.getPlayerId();
+        this.playerName = this._playerService.getPlayerName()
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
-        
+
+        // Subscribe to the observable.
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
+        
+        // Initiate the subscription.
         this.triviaService.getQuestions();                        
     }
 }
