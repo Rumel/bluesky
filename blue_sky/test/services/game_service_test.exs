@@ -72,4 +72,15 @@ defmodule BlueSky.GameServiceTest do
 
     assert question != nil
   end
+
+  test "guessing on a question" do
+    question = GameService.get_random_question
+    player = GameService.new_room("bigcakes")
+    room = player.room
+
+    guess = GameService.answer_question(room.id, question.id, player.id, "a")
+
+    assert guess != nil
+    assert guess.guess == "a"
+  end
 end

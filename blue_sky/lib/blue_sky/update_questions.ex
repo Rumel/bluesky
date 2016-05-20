@@ -19,6 +19,7 @@ defmodule BlueSky.UpdateQuestions do
     BlueSky.Endpoint.broadcast("room:join", "new_question", 
       %{
         question: random_question.question, 
+        question_id: random_question.id,
         a: random_question.a,
         b: random_question.b,
         c: random_question.c,
