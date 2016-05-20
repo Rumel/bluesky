@@ -45,7 +45,7 @@ createRoomButton.on("click", event => {
 })
 
 createGuessButton.on("click", event => {
-  channel.push("new_guess", { player_id: playerId, question_id: questionId, room_id: roomId, guess: "a" })
+  channel.push("new_guess", { question_id: questionId, guess: "a" })
   //usernameInput.val("")
 })
 
@@ -78,7 +78,10 @@ channel.join()
   .receive("ok", resp => { 
     console.log("Joined successfully", resp) 
 
-    channel.push("get_rooms", {})
+    channel.push("get_rooms", {}).receive("ok", rooms_resp => {
+      rooms = rooms_resp.rooms
+      console.log("got rooms back", rooms_resp)
+    })
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
