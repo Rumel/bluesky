@@ -10,20 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var Rx_1 = require('rxjs/Rx');
-var phoenix_js_1 = require('phoenix_js');
+var communication_service_1 = require('../services/communication.service');
 var question_1 = require('../models/question');
 var answer_1 = require('../models/answer');
 var TriviaService = (function () {
-    function TriviaService(_socket) {
+    function TriviaService(_communicationService) {
         var _this = this;
-        this._socket = _socket;
+        this._communicationService = _communicationService;
         this.question$ = new Rx_1.Observable(function (observer) { return _this._questionObserver = observer; }).share();
     }
     TriviaService.prototype.getQuestions = function () {
         var _this = this;
-        this._socket.connect();
-        var channel = this._socket.channel("room:join");
-        channel.on("new_question", function (msg) {
+        this._communicationService.roomChannel.on("new_question", function (msg) {
             var newQuestion = new question_1.Question();
             newQuestion.id = 1;
             newQuestion.order = 1;
@@ -49,17 +47,21 @@ var TriviaService = (function () {
             _this._question = newQuestion;
             _this._questionObserver.next(_this._question);
         });
-        channel.onError(function (e) { return console.log('error', e); });
-        channel.onClose(function (c) { return console.log('closed'); });
-        channel.join();
-        console.log('joined channel from service');
+        this._communicationService.roomChannel.onError(function (e) { return console.log('error', e); });
+        this._communicationService.roomChannel.onClose(function (c) { return console.log('closed'); });
     };
     TriviaService.prototype.submitAnswer = function (question, answer) {
+        this._communicationService.roomChannel.on("guessed", function (receivedGuess) {
+            console.log('Received ' + receivedGuess.guess_guess + ' for question ' + receivedGuess.guess_id);
+        });
+        this._communicationService.roomChannel.push("new_guess", { question_id: question, guess: answer })
+            .receive("ok", function (msg) { return console.log("created message", msg); })
+            .receive("error", function (reasons) { return console.log("create failed", reasons); });
         console.log('Submitted ' + answer + ' for question ' + question);
     };
     TriviaService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [phoenix_js_1.Socket])
+        __metadata('design:paramtypes', [communication_service_1.CommunicationService])
     ], TriviaService);
     return TriviaService;
 }());

@@ -6,13 +6,14 @@ import { ResultComponent } from './result.component';
 import { TriviaService } from '../services/trivia.service';
 import { SignUpService } from '../services/signup.service';
 import { PlayerService } from '../services/player.service';
+import { CommunicationService } from '../services/communication.service';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
 @Component({
   selector: 'content',
   templateUrl: './app/views/app.html',
   directives: [ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, TriviaService, SignUpService, PlayerService]
+  providers: [ROUTER_PROVIDERS, TriviaService, SignUpService, PlayerService, CommunicationService]
 })
 @RouteConfig([
   {

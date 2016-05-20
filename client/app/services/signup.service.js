@@ -9,33 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var phoenix_js_1 = require('phoenix_js');
 var Rx_1 = require('rxjs/Rx');
+var communication_service_1 = require('../services/communication.service');
 var SignUpService = (function () {
-    function SignUpService(_socket) {
+    function SignUpService(_communicationService) {
         var _this = this;
-        this._socket = _socket;
+        this._communicationService = _communicationService;
         this.playerId$ = new Rx_1.Observable(function (observer) { return _this._playerIdObserver = observer; }).share();
     }
     SignUpService.prototype.signUp = function (name) {
         var _this = this;
-        this._socket.connect();
-        var channel = this._socket.channel("room:join");
-        channel.onError(function (e) { return console.log('Error in room channel in signup.service.', e); });
-        channel.onClose(function (c) { return console.log('room channel closed in signup.service.'); });
+        this._communicationService.roomChannel.onError(function (e) { return console.log('Error in room channel in signup.service.', e); });
+        this._communicationService.roomChannel.onClose(function (c) { return console.log('room channel closed in signup.service.'); });
         // Set up response for the new player
-        channel.on("new_player", function (newPlayerId) {
+        this._communicationService.roomChannel.on("new_player", function (newPlayerId) {
             _this._playerId = newPlayerId;
             _this._playerIdObserver.next(_this._playerId);
-            channel.leave();
         });
-        channel.join();
-        console.log('Joined room channel from signup.service.');
-        channel.push("new_room", { "name": name });
+        this._communicationService.roomChannel.push("new_room", { "name": name });
     };
     SignUpService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [phoenix_js_1.Socket])
+        __metadata('design:paramtypes', [communication_service_1.CommunicationService])
     ], SignUpService);
     return SignUpService;
 }());
