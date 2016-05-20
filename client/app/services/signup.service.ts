@@ -1,24 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'phoenix_js';
+import { Observable, Observer } from 'rxjs/Rx';
 
 @Injectable()
 export class SignUpService {
-    constructor(private _socket: Socket) { }
-    
-    private mockSignUp() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-            return v.toString(16);
+    playerId$: Observable<string>;
+    private _playerIdObserver: Observer<string>;
+    private _playerId: string;
+
+    constructor(private _socket: Socket) {
+        this.playerId$ = new Observable<string>(observer =>  this._playerIdObserver = observer).share();
+     }
+                
+    signUp(name: string) {               
+        this._socket.connect();
+        
+        let channel = this._socket.channel("room:join");
+        channel.onError(e => {
+            console.log('error', e)
         });
-    }
-    
-    private callSignUpService(name: string) {
         
-    }
-    
-    signUp(name: string) {
-        return Promise.resolve(this.mockSignUp());
+        channel.onClose(c => console.log('closed'));
+               
+        // Set up response for the new player
+        channel.on("new_player", newPlayerId => {             
+            this._playerId = newPlayerId;
+            this._playerIdObserver.next(this._playerId);
+        });
         
-        // TODO: Need to connect to the socket and get the player id.
+        channel.join();
+        console.log('joined channel from service');
+        
+        channel.push("new_room", { "name": name });
     }
 }

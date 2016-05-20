@@ -17,14 +17,16 @@ export class SignUpComponent implements OnInit {
     constructor(private _router: Router, private _signUpService: SignUpService, private _playerService: PlayerService) {}
     
     onSubmit() {
-        this._signUpService.signUp(this.player.name)
-                            .then(playerid => {
-                                this._playerService.setPlayer(playerid, this.player.name);
-                                this._router.navigate(['Question']);                                
-                            });
+        this._signUpService.signUp(this.player.name);
+    }
+    
+    private setUpPlayer(playerid: string) {
+        this._playerService.setPlayer(playerid, this.player.name);
+        this._router.navigate(['Question']);       
     }
     
     ngOnInit() {
-        this.player = new Player();        
+        this.player = new Player();      
+        this._signUpService.playerId$.subscribe(newPlayerId => this.setUpPlayer(newPlayerId));  
     }
 }
