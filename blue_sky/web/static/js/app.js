@@ -67,7 +67,7 @@ channel.on("new_player", data => {
 channel.on("new_question", payload => {
   console.log("new question", payload)
 
-  questionId = payload.question.id
+  questionId = payload.question_id
 })
 
 channel.on("guessed", payload => {

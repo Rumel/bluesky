@@ -86,11 +86,11 @@ defmodule BlueSky.GameService do
     question = get_question(question_id)
     player = get_player(player_id)
 
-    guess = Ecto.build_assoc(room, :guesses, %{question_id: question.id, player_id: player.id})
+    guess = Ecto.build_assoc(room, :guesses, %{question_id: question.id, player_id: player.id, guess: guess})
 
     case Repo.insert(guess) do
       {:ok, result} ->
-        Repo.preload(guess, :player)
+        Repo.preload(result, :player)
       {:error, error} ->
         error
     end

@@ -3,7 +3,7 @@ defmodule BlueSky.Guess do
 
   schema "guesses" do
     field :guess, :string
-    belongs_to :room, BlueSky.Room
+    belongs_to :room, BlueSky.Room, type: :binary_id
     belongs_to :question, BlueSky.Question
     belongs_to :player, BlueSky.Player
 
