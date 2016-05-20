@@ -1,6 +1,6 @@
 import { Injectable , OnInit} from '@angular/core';
 import { Observable, Observer } from 'rxjs/Rx';
-import { Socket } from 'phoenix_js';
+import { CommunicationService } from '../services/communication.service';
 import { Question } from '../models/question';
 import { Answer } from '../models/answer';
 
@@ -11,16 +11,12 @@ export class TriviaService {
     private _questionObserver: Observer<Question>;
     private _question: Question;
     
-    constructor(private _socket: Socket) { 
+    constructor(private _communicationService: CommunicationService) { 
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();        
     }
-    
-    getQuestions() {
-        this._socket.connect();
-        
-        let channel = this._socket.channel("room:join");
-        
-        channel.on("new_question", msg => {
+          
+    getQuestions() {        
+        this._communicationService.roomChannel.on("new_question", msg => {
             let newQuestion = new Question();
             newQuestion.id = 1;
             newQuestion.order = 1;
@@ -52,14 +48,20 @@ export class TriviaService {
             this._question = newQuestion;
             this._questionObserver.next(this._question);
         });
-        
-        channel.onError(e => console.log('error', e));
-        channel.onClose(c => console.log('closed'));
-        channel.join();
-        console.log('joined channel from service');
+                         
+        this._communicationService.roomChannel.onError(e => console.log('error', e));
+        this._communicationService.roomChannel.onClose(c => console.log('closed'));
     }
     
-    submitAnswer(question: number, answer: string) {
+    submitAnswer(question: number, answer: string) {                
+        this._communicationService.roomChannel.on("guessed", receivedGuess => {
+            console.log('Received ' + receivedGuess.guess_guess + ' for question ' + receivedGuess.guess_id);
+        });
+        
+        this._communicationService.roomChannel.push("new_guess", { question_id: question, guess: answer })
+        .receive("ok", (msg) => console.log("created message", msg))
+        .receive("error", (reasons) => console.log("create failed", reasons));
+        
         console.log('Submitted ' + answer + ' for question ' + question);
     }
 }
