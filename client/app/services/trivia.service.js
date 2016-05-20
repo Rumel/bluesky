@@ -22,7 +22,7 @@ var TriviaService = (function () {
     TriviaService.prototype.getQuestions = function () {
         var _this = this;
         this._socket.connect();
-        var channel = this._socket.channel("test:lobby");
+        var channel = this._socket.channel("room:join");
         channel.on("new_question", function (msg) {
             var newQuestion = new question_1.Question();
             newQuestion.id = 1;

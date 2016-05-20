@@ -32,7 +32,8 @@ var AppComponent = (function () {
             {
                 path: '/signup',
                 name: 'SignUp',
-                component: signup_component_1.SignUpComponent
+                component: signup_component_1.SignUpComponent,
+                useAsDefault: true
             },
             {
                 path: '/question/',

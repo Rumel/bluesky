@@ -32,7 +32,7 @@ export class QuestionComponent implements OnInit {
     private handleNextQuestion(nextQuestion: Question) {
         clearInterval(this._countdownTimer);
         this.question = nextQuestion;
-        this.remainingSeconds = 5;
+        this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
         this._countdownTimer = setInterval(() => this.remainingSeconds--, 1000);             
     }
@@ -41,7 +41,7 @@ export class QuestionComponent implements OnInit {
         this.question = new Question();
         this.question.answers = new Array<Answer>();
         this.playerid = this._playerService.getPlayerId();
-        this.remainingSeconds = 5;
+        this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
         
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));

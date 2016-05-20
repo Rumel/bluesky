@@ -16,7 +16,7 @@ defmodule BlueSky.UpdateQuestions do
     #get new question here and push it out after a certain time period or after all users have answered maybe? 
     random_question = GameService.get_random_question
 
-    BlueSky.Endpoint.broadcast("test:lobby", "new_question", 
+    BlueSky.Endpoint.broadcast("room:join", "new_question", 
       %{
         question: random_question.question, 
         a: random_question.a,

@@ -18,7 +18,7 @@ export class TriviaService {
     getQuestions() {
         this._socket.connect();
         
-        let channel = this._socket.channel("test:lobby");
+        let channel = this._socket.channel("room:join");
         
         channel.on("new_question", msg => {
             let newQuestion = new Question();

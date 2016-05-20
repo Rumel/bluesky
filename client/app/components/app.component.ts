@@ -18,7 +18,8 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
   {
     path: '/signup',
     name: 'SignUp',
-    component: SignUpComponent
+    component: SignUpComponent, 
+    useAsDefault: true
   },
   {
     path: '/question/',

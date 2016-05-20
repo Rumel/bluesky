@@ -30,7 +30,7 @@ var QuestionComponent = (function () {
         var _this = this;
         clearInterval(this._countdownTimer);
         this.question = nextQuestion;
-        this.remainingSeconds = 5;
+        this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
         this._countdownTimer = setInterval(function () { return _this.remainingSeconds--; }, 1000);
     };
@@ -39,7 +39,7 @@ var QuestionComponent = (function () {
         this.question = new question_1.Question();
         this.question.answers = new Array();
         this.playerid = this._playerService.getPlayerId();
-        this.remainingSeconds = 5;
+        this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
         this.triviaService.question$.subscribe(function (nextQuestion) { return _this.handleNextQuestion(nextQuestion); });
         this.triviaService.getQuestions();
