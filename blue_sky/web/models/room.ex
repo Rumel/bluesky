@@ -4,6 +4,8 @@ defmodule BlueSky.Room do
   @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "rooms" do
+    field :name, :string
+
     has_many :players, BlueSky.Player
     has_many :guesses, BlueSky.Guess
 
