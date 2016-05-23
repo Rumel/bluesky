@@ -13,13 +13,14 @@ defmodule BlueSky.GameService do
       {:ok, result} ->
         BlueSky.UpdateQuestions.start_link(result.id)
         add_player(result, player_name)
+        get_room(result.id) |> Repo.preload(:players)
       {:error, error} ->
         error
     end
   end
 
   def get_room(room_id) do
-    Repo.get(Room, room_id)
+    Repo.get(Room, room_id) |> Repo.preload(:players)
   end
 
   def get_rooms() do
