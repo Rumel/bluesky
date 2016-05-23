@@ -24,10 +24,8 @@ defmodule BlueSky.RoomChannel do
     {:ok, %{ player_id: player.id, room_id: room.id }, socket}
   end
 
-  def handle_in("new_room", %{"name" => name} = params, socket) do
-    IO.puts "Name passed in was: #{name}"
-
-    player = GameService.new_room(name)
+  def handle_in("new_room", %{"name" => name, "player_name" => player_name} = params, socket) do
+    player = GameService.new_room(name, player_name)
 
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: player.room.id })
 
