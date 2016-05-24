@@ -7,7 +7,7 @@ export class CommunicationService {
 
     constructor(private _socket: Socket) { 
         this._socket.connect();
-        this.roomChannel = this._socket.channel("room:join");
+        this.roomChannel = this._socket.channel("room:lobby");
         this.roomChannel.join();
     }    
 }

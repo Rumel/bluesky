@@ -14,7 +14,7 @@ var CommunicationService = (function () {
     function CommunicationService(_socket) {
         this._socket = _socket;
         this._socket.connect();
-        this.roomChannel = this._socket.channel("room:join");
+        this.roomChannel = this._socket.channel("room:lobby");
         this.roomChannel.join();
     }
     CommunicationService = __decorate([

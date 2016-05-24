@@ -24,7 +24,7 @@ var SignUpComponent = (function () {
     };
     SignUpComponent.prototype.setUpPlayer = function (playerid) {
         this._playerService.setPlayer(playerid, this.player.name);
-        this._router.navigate(['Question']);
+        this._router.navigate(['Room']);
     };
     SignUpComponent.prototype.ngOnInit = function () {
         var _this = this;

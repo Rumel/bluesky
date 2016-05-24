@@ -22,7 +22,7 @@ export class SignUpComponent implements OnInit {
     
     private setUpPlayer(playerid: string) {
         this._playerService.setPlayer(playerid, this.player.name);
-        this._router.navigate(['Question']);       
+        this._router.navigate(['Room']);       
     }
     
     ngOnInit() {

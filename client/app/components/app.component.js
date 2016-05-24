@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var signup_component_1 = require('./signup.component');
 var question_component_1 = require('./question.component');
+var room_component_1 = require('./room.component');
 var result_component_1 = require('./result.component');
 var trivia_service_1 = require('../services/trivia.service');
 var signup_service_1 = require('../services/signup.service');
 var player_service_1 = require('../services/player.service');
 var communication_service_1 = require('../services/communication.service');
+var room_service_1 = require('../services/room.service');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var AppComponent = (function () {
     function AppComponent(triviaService, signUpService) {
@@ -27,7 +29,7 @@ var AppComponent = (function () {
             selector: 'content',
             templateUrl: './app/views/app.html',
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
-            providers: [router_deprecated_1.ROUTER_PROVIDERS, trivia_service_1.TriviaService, signup_service_1.SignUpService, player_service_1.PlayerService, communication_service_1.CommunicationService]
+            providers: [router_deprecated_1.ROUTER_PROVIDERS, trivia_service_1.TriviaService, signup_service_1.SignUpService, player_service_1.PlayerService, communication_service_1.CommunicationService, room_service_1.RoomService]
         }),
         router_deprecated_1.RouteConfig([
             {
@@ -40,6 +42,11 @@ var AppComponent = (function () {
                 path: '/question/',
                 name: 'Question',
                 component: question_component_1.QuestionComponent
+            },
+            {
+                path: '/room/',
+                name: 'Room',
+                component: room_component_1.RoomComponent
             },
             {
                 path: '/result/:question/:answer',
