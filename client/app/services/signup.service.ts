@@ -22,6 +22,6 @@ export class SignUpService {
             this._playerIdObserver.next(this._playerId);       
         });
                      
-        this._communicationService.roomChannel.push("new_room", { "name": name });
+        this._communicationService.roomChannel.push("new_room", { "name": name, "player_name": name });
     }
 }
