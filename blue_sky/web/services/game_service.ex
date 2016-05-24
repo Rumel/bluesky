@@ -8,19 +8,19 @@ defmodule BlueSky.GameService do
 
   import Ecto.Query
 
-  def new_room(name) do
-      #worker(BlueSky.UpdateQuestions,[]),
-    case Repo.insert(%Room{}) do
+  def new_room(name, player_name) do
+    case Repo.insert(%Room{name: name}) do
       {:ok, result} ->
         BlueSky.UpdateQuestions.start_link(result.id)
-        add_player(result, name)
+        add_player(result, player_name)
+        get_room(result.id) |> Repo.preload(:players)
       {:error, error} ->
         error
     end
   end
 
   def get_room(room_id) do
-    Repo.get(Room, room_id)
+    Repo.get(Room, room_id) |> Repo.preload(:players)
   end
 
   def get_rooms() do

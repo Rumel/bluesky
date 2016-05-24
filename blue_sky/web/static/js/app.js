@@ -74,6 +74,10 @@ function bindHandlers() {
   channel.on("guessed", payload => {
     console.log("new guess", payload)
   })
+
+  channel.on("new_player", payload => {
+   console.log("new player", payload)
+  });
 }
 
 bindHandlers()
