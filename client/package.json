@@ -6,7 +6,7 @@
     "lite": "lite-server",
     "postinstall": "typings install",
     "tsc": "tsc",
-    "tsc:w": "tsc -w",
+    "tsc:w": "tsc -w --outDir build",
     "typings": "typings"
   },
   "license": "ISC",
