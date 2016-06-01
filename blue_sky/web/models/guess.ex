@@ -5,6 +5,7 @@ defmodule BlueSky.Guess do
     field :guess, :string
     belongs_to :room, BlueSky.Room, type: :binary_id
     belongs_to :question, BlueSky.Question
+    belongs_to :asked_question, BlueSky.AskedQuestion
     belongs_to :player, BlueSky.Player
 
     timestamps
