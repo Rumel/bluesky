@@ -2,6 +2,7 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.Repo
 
+  alias BlueSky.AskedQuestion
   alias BlueSky.Player
   alias BlueSky.Room
   alias BlueSky.Question
@@ -73,22 +74,28 @@ defmodule BlueSky.GameService do
   end
 
   # Take in room id room_id
-  def get_random_question() do
+  def get_random_question(room_id) do
+    aq_query = from aq in AskedQuestion,
+               select: aq.question_id,
+               where: aq.room_id == ^room_id
+
+    ids = Repo.all(aq_query)
+
     # Get already asked questions
     # Get new random question not in asked questions
     query = from q in Question,
             order_by: fragment("RANDOM()"),
+            where: q.id in ^ids == false,
             limit: 1
 
-    Repo.one(query)
+    question = Repo.one(query)
+    {:ok, result} = Repo.insert(%BlueSky.AskedQuestion{ question_id: question.id, room_id: room_id })
+
+    question |> Map.put(:asked_question_id, result.id)
   end
 
-  def answer_question(room_id, question_id, player_id, guess) do
-    room = get_room(room_id)
-    question = get_question(question_id)
-    player = get_player(player_id)
-
-    guess = Ecto.build_assoc(room, :guesses, %{question_id: question.id, player_id: player.id, guess: guess})
+  def answer_question(room_id, question_id, asked_question_id, player_id, guess) do
+    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess}
 
     case Repo.insert(guess) do
       {:ok, result} ->
