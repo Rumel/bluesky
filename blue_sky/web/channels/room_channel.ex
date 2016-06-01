@@ -45,10 +45,10 @@ defmodule BlueSky.RoomChannel do
     {:reply, {:ok, %{ rooms: rooms }}, socket}
   end
 
-  def handle_in("new_guess", %{"question_id" => question_id, "asked_question_id" => asked_question_id, "guess" => guess} = params, socket) do
+  def handle_in("new_guess", %{"question_id" => question_id, "guess" => guess} = params, socket) do
     player = socket.assigns[:player_details]
 
-    guess = GameService.answer_question(player.room_id, question_id, asked_question_id, player.player_id, guess)
+    guess = GameService.answer_question(player.room_id, question_id, player.player_id, guess)
 
     IO.inspect guess
 

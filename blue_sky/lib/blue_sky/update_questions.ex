@@ -4,27 +4,31 @@ defmodule BlueSky.UpdateQuestions do
   alias BlueSky.GameService
 
   def start_link(room_id) do
-    GenServer.start_link(__MODULE__, %{ room_id: room_id, lastQuestion: nil })
+    state = %{ room_id: room_id, question_ids: [], current_question_id: nil }
+    GenServer.start_link(__MODULE__, state, name: {:global, {:update_questions, room_id}})
+  end
+
+  def whereis(room_id) do
+    :global.whereis_name({:update_questions, room_id})
   end
 
   def init(state) do
-    Process.send_after(self(), :work, 5_000) # In 5 seconds
-    IO.puts "Initted a gen server"
+    Process.send_after(self, :work, 5_000) # In 5 seconds
+    IO.puts "Starting a genserver with process id #{inspect(self)}"
     {:ok, state}
   end
 
   def handle_info(:work, state) do
-    IO.puts "handled work on a gen server"
+    IO.puts "Handled work on a gen server"
     IO.inspect state
 
-    #get new question here and push it out after a certain time period or after all users have answered maybe? 
-    random_question = GameService.get_random_question(state.room_id)
+    # Get new question here and push it out after a certain time period or after all users have answered maybe? 
+    random_question = GameService.get_random_question(state.question_ids)
 
-    BlueSky.Endpoint.broadcast_from(self(), "room:" <> state.room_id, "new_question", 
+    BlueSky.Endpoint.broadcast_from(self, "room:" <> state.room_id, "new_question", 
       %{
         question: random_question.question, 
         question_id: random_question.id,
-        asked_question_id: random_question.asked_question_id,
         a: random_question.a,
         b: random_question.b,
         c: random_question.c,
@@ -33,12 +37,28 @@ defmodule BlueSky.UpdateQuestions do
       })
 
     # Add questions asked to an array
-    state = %{ state | lastQuestion: random_question.id }
+    state = state |> Map.put(:question_ids, [random_question.id | state.question_ids])
+                  |> Map.put(:current_question_id, random_question.id)
 
     # Start the timer again
-    Process.send_after(self(), :work, 30_000) # In 30 seconds
+    Process.send_after(self, :work, 60_000) # In 60 seconds
 
-    #pass the max_id into the state so we can skip previously seen data in next iteration
-    {:noreply, state}#%{"last_id" => max_id}}
+    {:noreply, state}
+  end
+
+  def handle_call(:get_current_question, _from, state) do
+    {:reply, state.current_question_id, state}
+  end
+
+  def handle_call(:get_questions, _from, state) do
+    {:reply, state.question_ids, state}
+  end
+
+  def get_current_question(room_id) do
+    whereis(room_id) |> GenServer.call(:get_current_question)
+  end
+
+  def get_questions(room_id) do
+    whereis(room_id) |> GenServer.call(:get_questions)
   end
 end
