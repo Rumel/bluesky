@@ -1,5 +1,19 @@
 <div>
     <div *ngFor="let room of roomlist">
-        <button (click)="joinRoom(room.name)">{{room.name}}</button>
+        <button (click)="joinRoom(room.id)">{{room.id}}</button>
     </div>  
+    
+    <form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
+        <div class="form-group">
+            <input  type="text" 
+                    [(ngModel)]="roomInput.name" 
+                    ngControl="roomName" 
+                    placeholder="Room Name" 
+                    class="form-control" 
+                    #roomName="ngForm" 
+                    required />
+
+            <button type="submit" [disabled]="!createRoomForm.valid">Create Room</button>
+        </div>
+    </form>
 </div>
