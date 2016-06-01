@@ -16,9 +16,7 @@ export class QuestionComponent implements OnInit {
     selectedAnswerToDisplay: string;
     isQuestionAnswered: boolean;
     remainingSeconds: number;
-    
-    private _playerId: string;
-    
+           
     private _countdownTimer: any;
     
     constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService) { }
@@ -47,8 +45,7 @@ export class QuestionComponent implements OnInit {
     
     ngOnInit() {
         this.question = new Question();
-        this.question.answers = new Array<Answer>();
-        this._playerId = this._playerService.getPlayerId();
+        this.question.answers = new Array<Answer>();        
         this.playerName = this._playerService.getPlayerName()
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;

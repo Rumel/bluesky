@@ -1,4 +1,4 @@
 export class Room {
-    id: number;
+    id: string;
     name: string;    
 }
