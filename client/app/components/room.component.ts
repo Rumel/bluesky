@@ -27,8 +27,12 @@ export class RoomComponent implements OnInit {
     }
     
     joinRoom(room: any) {
-      this._roomService.joinRoom(room);
-      this._router.navigate(['Question']);       
+      this._roomService.room$.subscribe((selectedRoom) => {
+        this.roomInput = selectedRoom;
+        this._router.navigate(['Question']);
+      });
+      
+      this._roomService.joinRoom(room);             
     } 
     
     createRoom() {

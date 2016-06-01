@@ -4,7 +4,7 @@ declare module "phoenix_js" {
     connect(): void;
     disconnect(callback: any, code: any, reason: any): void;
     //channel(topic: any, params: any, socket: any): void;
-    channel(topic: any): Channel;
+    channel(topic: any, params: Object): Channel;
   }
   
   class Channel {
