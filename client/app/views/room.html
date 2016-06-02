@@ -1,19 +1,20 @@
-<div>
-    <div *ngFor="let room of roomlist">
-        <button (click)="joinRoom(room.id)">{{room.id}}</button>
-    </div>  
-    
-    <form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
-        <div class="form-group">
-            <input  type="text" 
-                    [(ngModel)]="roomInput.name" 
-                    ngControl="roomName" 
-                    placeholder="Room Name" 
-                    class="form-control" 
-                    #roomName="ngForm" 
-                    required />
+<form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
+    <div class="form-group">
+        <input  type="text" 
+                [(ngModel)]="roomInput.name" 
+                ngControl="roomName" 
+                placeholder="Room Name" 
+                class="form-control" 
+                #roomName="ngForm" 
+                required
+                autofocus />
 
-            <button type="submit" [disabled]="!createRoomForm.valid">Create Room</button>
-        </div>
-    </form>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="!createRoomForm.valid"><i class="fa fa-save" aria-hidden="true"></i> Create Room</button>
+</form>
+<hr />
+<div class="list-group">
+    <a *ngFor="let room of roomlist" (click)="joinRoom(room.id)" href="javascript:void(0)" class="list-group-item">
+    {{room.name}}-{{room.id}}
+    </a>
 </div>

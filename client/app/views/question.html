@@ -6,10 +6,12 @@
     <div>
         <h3>{{question.text}}</h3>
     </div>
-    <div *ngIf="!isQuestionAnswered">
-        <div *ngFor="let answer of question.answers">
-            <button (click)="answerSelected(question.id, answer.selector)">{{answer.selector}}.</button> {{answer.text}}
-        </div>        
+    <div *ngIf="!isQuestionAnswered" class="radio">
+        <div *ngFor="let answer of question.answers" class="col-md-6">
+            <label>
+                <input (click)="answerSelected(question.id, answer.selector)" type="radio" />{{answer.selector}}. {{answer.text}}
+            </label>        
+        </div>
     </div>
     <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay">
         <div>
