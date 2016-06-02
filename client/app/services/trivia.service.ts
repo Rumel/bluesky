@@ -18,8 +18,8 @@ export class TriviaService {
     getQuestions() {        
         this._communicationService.roomChannel.on("new_question", msg => {
             let newQuestion = new Question();
-            newQuestion.id = 1;
-            newQuestion.order = 1;
+            newQuestion.id = msg.question_id;
+            newQuestion.order = msg.question_id;
             newQuestion.text = msg.question;
             
             let answers = new Array<Answer>();

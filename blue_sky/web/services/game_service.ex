@@ -2,7 +2,8 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.Repo
 
-  alias BlueSky.AskedQuestion
+  alias BlueSky.QuestionsService
+
   alias BlueSky.Player
   alias BlueSky.Room
   alias BlueSky.Question
@@ -89,7 +90,8 @@ defmodule BlueSky.GameService do
 
     case Repo.insert(guess) do
       {:ok, result} ->
-        Repo.preload(result, :player)
+        result = Repo.preload(result, [:player, :question])
+        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: String.downcase(result.guess) == String.downcase(result.question.answer)}
       {:error, error} ->
         error
     end
