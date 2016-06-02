@@ -1,4 +1,4 @@
-defmodule BlueSky.UpdateQuestions do
+defmodule BlueSky.QuestionsService do
   use GenServer
 
   alias BlueSky.GameService
