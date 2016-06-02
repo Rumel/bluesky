@@ -23,25 +23,33 @@ defmodule BlueSky.UpdateQuestions do
     IO.inspect state
 
     # Get new question here and push it out after a certain time period or after all users have answered maybe? 
-    random_question = GameService.get_random_question(state.question_ids)
+  
+    room_name = "room:" <> state.room_id
+    
+    case length(state.question_ids) do
+      10 ->
+        BlueSky.Endpoint.broadcast_from(self, room_name, "game_over", %{})
+      _ ->
+        random_question = GameService.get_random_question(state.question_ids)
 
-    BlueSky.Endpoint.broadcast_from(self, "room:" <> state.room_id, "new_question", 
-      %{
-        question: random_question.question, 
-        question_id: random_question.id,
-        a: random_question.a,
-        b: random_question.b,
-        c: random_question.c,
-        d: random_question.d,
-        answer: random_question.answer
-      })
+        BlueSky.Endpoint.broadcast_from(self, room_name, "new_question", 
+          %{
+            question: random_question.question, 
+            question_id: random_question.id,
+            a: random_question.a,
+            b: random_question.b,
+            c: random_question.c,
+            d: random_question.d,
+            answer: random_question.answer
+          })
 
-    # Add questions asked to an array
-    state = state |> Map.put(:question_ids, [random_question.id | state.question_ids])
-                  |> Map.put(:current_question_id, random_question.id)
+        # Add questions asked to an array
+        state = state |> Map.put(:question_ids, [random_question.id | state.question_ids])
+                      |> Map.put(:current_question_id, random_question.id)
 
-    # Start the timer again
-    Process.send_after(self, :work, 60_000) # In 60 seconds
+        # Start the timer again
+        Process.send_after(self, :work, 30_000) # In 30 seconds
+    end
 
     {:noreply, state}
   end
