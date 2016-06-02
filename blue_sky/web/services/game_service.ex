@@ -2,7 +2,8 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.Repo
 
-  alias BlueSky.AskedQuestion
+  alias BlueSky.QuestionsService
+
   alias BlueSky.Player
   alias BlueSky.Room
   alias BlueSky.Question
@@ -84,12 +85,13 @@ defmodule BlueSky.GameService do
     Repo.one(query)
   end
 
-  def answer_question(room_id, question_id, player_id, guess) do
-    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess}
+  def answer_question(room_id, _question_id, player_id, guess) do
+    guess = %BlueSky.Guess{question_id: QuestionsService.get_current_question(room_id), player_id: player_id, room_id: room_id, guess: guess}
 
     case Repo.insert(guess) do
       {:ok, result} ->
-        Repo.preload(result, :player)
+        result = Repo.preload(result, [:player, :question])
+        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: String.downcase(result.guess) == String.downcase(result.question.answer)}
       {:error, error} ->
         error
     end
