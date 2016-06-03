@@ -8,3 +8,5 @@ app/models/*.js
 app/models/*.js.map
 app/services/*.js
 app/services/*.js.map
+prod/
+jspm_packages/
