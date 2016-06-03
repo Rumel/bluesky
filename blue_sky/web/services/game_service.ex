@@ -14,7 +14,6 @@ defmodule BlueSky.GameService do
   def new_room(name, player_name) do
     case Repo.insert(%Room{name: name}) do
       {:ok, result} ->
-        BlueSky.QuestionsService.start_link(result.id)
         add_player(result, player_name)
         get_room(result.id) |> Repo.preload(:players)
       {:error, error} ->

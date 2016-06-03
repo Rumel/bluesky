@@ -22,6 +22,13 @@ defmodule BlueSky.RoomChannel do
     {:ok, %{ player_id: player.id, room_id: room_id }, socket}
   end
 
+  def handle_in("start_game", _params, socket) do
+    room_id = socket.assigns[:player_details].room_id
+
+    # Start the server and game
+    BlueSky.QuestionsService.start_link(room_id)
+  end
+
   def handle_in("new_room", %{"name" => name, "player_name" => player_name} = params, socket) do
     room = GameService.new_room(name, player_name)
     player = List.first(room.players)
@@ -43,6 +50,18 @@ defmodule BlueSky.RoomChannel do
 
     #broadcast! socket, "rooms_list", %{ rooms: rooms }
     {:reply, {:ok, %{ rooms: rooms }}, socket}
+  end
+
+  def handle_in("get_players", _params, socket) do
+    players = GameService.get_players(socket.assigns[:player_details].room_id)
+              |> Enum.map(fn
+                  player -> 
+                    %{ name: player.name, id: player.id }
+                end)
+
+    broadcast! socket, "all_players", players
+
+    {:noreply, socket}
   end
 
   def handle_in("new_guess", %{"question_id" => question_id, "guess" => guess} = params, socket) do
