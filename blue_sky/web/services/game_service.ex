@@ -4,6 +4,7 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.QuestionsService
 
+  alias BlueSky.Guess
   alias BlueSky.Player
   alias BlueSky.Room
   alias BlueSky.Question
@@ -86,20 +87,33 @@ defmodule BlueSky.GameService do
   end
 
   def answer_question(room_id, question_id, player_id, guess) do
-    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess}
+    question = get_question(question_id)
+    correct = String.downcase(guess) == String.downcase(question.answer)
+    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess, correct: correct}
 
     case Repo.insert(guess) do
       {:ok, result} ->
         result = Repo.preload(result, [:player, :question])
-        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: String.downcase(result.guess) == String.downcase(result.question.answer)}
+        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: result.correct}
       {:error, error} ->
         error
     end
   end
 
-  def get_results(room_id, question_id) do
-  end
-
   def get_leaderboard(room_id) do
+    query = from g in Guess,
+            where: g.room_id == ^room_id
+
+    guesses = Repo.all(query)
+              |> Enum.group_by(fn x -> x.player_id end)
+              |> Enum.map(fn
+                   {key, value} ->
+                     %{ player_id: key, 
+                        correct: Enum.filter(value, fn x -> x.correct == true end) |> length }
+                 end)
+              |> Enum.sort(fn 
+                  %{correct: num_one}, %{correct: num_two} -> num_one >= num_two
+                 end)
+    guesses
   end
 end
