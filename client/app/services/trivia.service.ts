@@ -11,8 +11,12 @@ export class TriviaService {
     private _questionObserver: Observer<Question>;
     private _question: Question;
     
+    gameover$: Observable<boolean>;
+    private _gameoverObserver: Observer<boolean>;
+    
     constructor(private _communicationService: CommunicationService) { 
-        this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();        
+        this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
+        this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;  
     }
           
     getQuestions() {        
@@ -48,7 +52,12 @@ export class TriviaService {
             this._question = newQuestion;
             this._questionObserver.next(this._question);
         });
-                         
+        
+        this._communicationService.roomChannel.on("game_over", () => {
+            console.log('Game over.');
+            this._gameoverObserver.next(true);            
+        });
+        
         this._communicationService.roomChannel.onError(e => console.log('error', e));
         this._communicationService.roomChannel.onClose(c => console.log('closed'));
     }

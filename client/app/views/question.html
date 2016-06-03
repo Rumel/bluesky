@@ -6,14 +6,19 @@
     <div>
         <h3>{{question.text}}</h3>
     </div>
-    <div *ngIf="!isQuestionAnswered">
+    <div *ngIf="!isQuestionAnswered && !isGameOver">
         <div *ngFor="let answer of question.answers">
             <button (click)="answerSelected(question.id, answer.selector)">{{answer.selector}}.</button> {{answer.text}}
         </div>        
     </div>
-    <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay">
+    <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay && !isGameOver">
         <div>
             You chose: {{selectedAnswerToDisplay}}
+        </div>
+    </div>
+    <div *ngIf="isGameOver">
+        <div>
+            Game Over!
         </div>
     </div>
 </div>

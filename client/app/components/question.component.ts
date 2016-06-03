@@ -16,6 +16,7 @@ export class QuestionComponent implements OnInit {
     selectedAnswerToDisplay: string;
     isQuestionAnswered: boolean;
     remainingSeconds: number;
+    isGameOver: boolean;
            
     private _countdownTimer: any;
     
@@ -49,9 +50,11 @@ export class QuestionComponent implements OnInit {
         this.playerName = this._playerService.getPlayerName()
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
+        this.isGameOver = false;
 
         // Subscribe to the observable.
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
+        this.triviaService.gameover$.subscribe(go => this.isGameOver = true);
         
         // Initiate the subscription.
         this.triviaService.getQuestions();                        
