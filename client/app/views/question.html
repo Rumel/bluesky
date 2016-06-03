@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isGameOver">
     <h2>Question Number {{question.order}}</h2>
     <div>
         Remaining Seconds {{remainingSeconds}}
@@ -17,5 +17,10 @@
         <div>
             You chose: {{selectedAnswerToDisplay}}
         </div>
-    </div>
+    </div>   
+</div>
+ <div *ngIf="isGameOver">
+    <h1>
+        Game Over!
+    </h1>
 </div>
