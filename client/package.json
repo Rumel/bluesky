@@ -34,5 +34,12 @@
     "lite-server": "^2.2.0",
     "typescript": "^1.8.10",
     "typings": "^0.8.1"
+  },
+  "jspm": {
+    "configFile": "systemjs.config.js",
+    "dependencies": {},
+    "devDependencies": {
+      "typescript": "npm:typescript@^1.6.2"
+    }
   }
 }
