@@ -1,13 +1,15 @@
 <form (ngSubmit)="onSubmit()" #signUpForm="ngForm">
     <div class="form-group">
-        <input  type="text" 
-                [(ngModel)]="player.name" 
-                ngControl="playerName" 
-                placeholder="Name" 
-                class="form-control" 
-                #playerName="ngForm" 
-                required
-                autofocus />
+        <div class="col-md-4">
+            <input  type="text" 
+                    [(ngModel)]="player.name" 
+                    ngControl="playerName" 
+                    placeholder="Enter Your Name" 
+                    class="form-control" 
+                    #playerName="ngForm" 
+                    required
+                    autofocus />
+        </div>
     </div>
 
     <button class="btn btn-primary" type="submit" [disabled]="!signUpForm.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Let's Play!</button>

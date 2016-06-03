@@ -1,16 +1,22 @@
 <div *ngIf="!isGameOver">
-    <h2>Question Number {{question.order}}</h2>
-    <div>
-        Remaining Seconds {{remainingSeconds}}
+    <div *ngIf="!question.text">
+        <p>
+            Waiting for game to start 
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </p>
     </div>
-    <div>
-        <h3>{{question.text}}</h3>
-    </div>
-    <div *ngIf="!isQuestionAnswered" class="radio">
-        <div *ngFor="let answer of question.answers" class="col-md-6">
-            <label>
-                <input (click)="answerSelected(question.id, answer.selector)" type="radio" />{{answer.selector}}. {{answer.text}}
-            </label>        
+    <div *ngIf="question.text">
+        <h3>
+            #{{question.order}} {{question.text}}
+            <span class="label label-success">{{remainingSeconds}}</span>
+            <!-- *ngClass="{'label-success': remainingSeconds > 10, 'label-warning': remainingSeconds < 11}" -->
+        </h3>
+        <div *ngIf="!isQuestionAnswered" class="radio">
+            <div *ngFor="let answer of question.answers" class="col-md-6">
+                <label>
+                    <input (click)="answerSelected(question.id, answer.selector)" type="radio" />{{answer.selector}}. {{answer.text}}
+                </label>        
+            </div>
         </div>
     </div>
     <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay">

@@ -1,20 +1,27 @@
 <form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
     <div class="form-group">
-        <input  type="text" 
-                [(ngModel)]="roomInput.name" 
-                ngControl="roomName" 
-                placeholder="Room Name" 
-                class="form-control" 
-                #roomName="ngForm" 
-                required
-                autofocus />
+        <div class="col-md-4">
+            <input  type="text" 
+                    [(ngModel)]="roomInput.name" 
+                    ngControl="roomName" 
+                    placeholder="Enter a Room Name" 
+                    class="form-control" 
+                    #roomName="ngForm" 
+                    required
+                    autofocus />
+        </div>
 
     </div>
     <button class="btn btn-primary" type="submit" [disabled]="!createRoomForm.valid"><i class="fa fa-save" aria-hidden="true"></i> Create Room</button>
 </form>
 <hr />
+<h3>Available Rooms</h3>
 <div class="list-group">
     <a *ngFor="let room of roomlist" (click)="joinRoom(room.id)" href="javascript:void(0)" class="list-group-item">
     {{room.name}}-{{room.id}}
     </a>
+</div>
+
+<div *ngIf="roomlist.length === 0">
+    <p>Be the first to create a room!</p>
 </div>
