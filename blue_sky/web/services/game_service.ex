@@ -99,9 +99,6 @@ defmodule BlueSky.GameService do
     end
   end
 
-  def get_results(room_id, question_id) do
-  end
-
   def get_leaderboard(room_id) do
   end
 end
