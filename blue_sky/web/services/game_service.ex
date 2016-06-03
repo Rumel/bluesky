@@ -86,12 +86,14 @@ defmodule BlueSky.GameService do
   end
 
   def answer_question(room_id, question_id, player_id, guess) do
-    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess}
+    question = get_question(question_id)
+    correct = String.downcase(guess) == String.downcase(question.answer)
+    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess, correct: correct}
 
     case Repo.insert(guess) do
       {:ok, result} ->
         result = Repo.preload(result, [:player, :question])
-        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: String.downcase(result.guess) == String.downcase(result.question.answer)}
+        %{id: result.id, guess: result.guess, answer: result.question.answer, correct: result.correct}
       {:error, error} ->
         error
     end
