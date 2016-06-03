@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isGameOver">
     <h2>Question Number {{question.order}}</h2>
     <div>
         Remaining Seconds {{remainingSeconds}}
@@ -6,21 +6,21 @@
     <div>
         <h3>{{question.text}}</h3>
     </div>
-    <div *ngIf="!isQuestionAnswered  && !isGameOver" class="radio">
+    <div *ngIf="!isQuestionAnswered" class="radio">
         <div *ngFor="let answer of question.answers" class="col-md-6">
             <label>
                 <input (click)="answerSelected(question.id, answer.selector)" type="radio" />{{answer.selector}}. {{answer.text}}
             </label>        
         </div>
     </div>
-    <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay && !isGameOver">
+    <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay">
         <div>
             You chose: {{selectedAnswerToDisplay}}
         </div>
-    </div>
-    <div *ngIf="isGameOver">
-        <div>
-            Game Over!
-        </div>
-    </div>
+    </div>   
+</div>
+ <div *ngIf="isGameOver">
+    <h1>
+        Game Over!
+    </h1>
 </div>
