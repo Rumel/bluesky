@@ -85,8 +85,8 @@ defmodule BlueSky.GameService do
     Repo.one(query)
   end
 
-  def answer_question(room_id, _question_id, player_id, guess) do
-    guess = %BlueSky.Guess{question_id: QuestionsService.get_current_question(room_id), player_id: player_id, room_id: room_id, guess: guess}
+  def answer_question(room_id, question_id, player_id, guess) do
+    guess = %BlueSky.Guess{question_id: question_id, player_id: player_id, room_id: room_id, guess: guess}
 
     case Repo.insert(guess) do
       {:ok, result} ->

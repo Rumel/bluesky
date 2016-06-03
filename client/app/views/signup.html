@@ -6,8 +6,9 @@
                 placeholder="Name" 
                 class="form-control" 
                 #playerName="ngForm" 
-                required />
-
-        <button type="submit" [disabled]="!signUpForm.valid">Let's Play!</button>
+                required
+                autofocus />
     </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!signUpForm.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Let's Play!</button>
 </form>
