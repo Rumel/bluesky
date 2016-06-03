@@ -19,6 +19,8 @@ defmodule BlueSky.RoomChannel do
 
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room_id })
 
+    broadcast! socket, "new_player", %{ name: player.name, id: player.id }
+
     {:ok, %{ player_id: player.id, room_id: room_id }, socket}
   end
 
