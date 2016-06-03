@@ -4,6 +4,7 @@ defmodule BlueSky.GameService do
 
   alias BlueSky.QuestionsService
 
+  alias BlueSky.Guess
   alias BlueSky.Player
   alias BlueSky.Room
   alias BlueSky.Question
@@ -100,5 +101,19 @@ defmodule BlueSky.GameService do
   end
 
   def get_leaderboard(room_id) do
+    query = from g in Guess,
+            where: g.room_id == ^room_id
+
+    guesses = Repo.all(query)
+              |> Enum.group_by(fn x -> x.player_id end)
+              |> Enum.map(fn
+                   {key, value} ->
+                     %{ player_id: key, 
+                        correct: Enum.filter(value, fn x -> x.correct == true end) |> length }
+                 end)
+              |> Enum.sort(fn 
+                  %{correct: num_one}, %{correct: num_two} -> num_one >= num_two
+                 end)
+    guesses
   end
 end

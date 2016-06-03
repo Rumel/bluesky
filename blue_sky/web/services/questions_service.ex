@@ -28,7 +28,8 @@ defmodule BlueSky.QuestionsService do
     
     case length(state.question_ids) do
       10 ->
-        BlueSky.Endpoint.broadcast_from(self, room_name, "game_over", %{})
+        leaderboard = GameService.get_leaderboard(state.room_id)
+        BlueSky.Endpoint.broadcast_from(self, room_name, "game_over", %{ leaderboard: leaderboard })
       _ ->
         random_question = GameService.get_random_question(state.question_ids)
 
