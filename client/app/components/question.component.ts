@@ -5,6 +5,7 @@ import { TriviaService } from '../services/trivia.service';
 import { Question } from '../models/question';
 import { Answer } from '../models/answer';
 import { PlayerService } from '../services/player.service';
+import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'question',
@@ -18,10 +19,11 @@ export class QuestionComponent implements OnInit {
     remainingSeconds: number;
     isGameOver: boolean;
     createdRoom: boolean;
+    players: Array<string>;
            
     private _countdownTimer: any;
     
-    constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService) { }
+    constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService, private _roomService: RoomService) { }
     
     startGame() {
         console.log('Game started.');
@@ -50,6 +52,12 @@ export class QuestionComponent implements OnInit {
         this._countdownTimer = setInterval(() => this.remainingSeconds--, 1000);             
     }
     
+    private addPlayersToList(players: Array<string>) {
+        players.forEach(player => {
+            this.players.push(player);
+        });
+    }
+    
     ngOnInit() {
         this.question = new Question();
         this.question.answers = new Array<Answer>();        
@@ -62,8 +70,10 @@ export class QuestionComponent implements OnInit {
         // Subscribe to the observable.
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
         this.triviaService.gameover$.subscribe(go => this.isGameOver = true);
+        this._roomService.players$.subscribe(players => this.addPlayersToList(players));
         
         // Initiate the subscription.
-        this.triviaService.getQuestions();                        
+        this.triviaService.getQuestions();        
+        this._roomService.getPlayers();                
     }
 }

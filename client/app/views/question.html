@@ -4,7 +4,13 @@
             Waiting for game to start 
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         </p>
+        <div class="list-group">
+            <div *ngFor="let player of players">
+                {{ player }}
+            </div>    
+        </div>
     </div>
+    <h3>Players</h3>
     <div *ngIf="!question.text && createdRoom">        
         <button class="btn btn-primary" (click)="startGame()">Start Game</button>        
     </div>
