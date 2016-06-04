@@ -6,8 +6,11 @@ gulp.task('prep', function() {
     exec('npm install');
 });
 
+gulp.task('compile', function() {
+    exec('npm run tsc');
+});
 
-gulp.task('build_dev', function(){
+gulp.task('build_dev', ['compile'], function(){
     jspm({
       bundleOptions: {
         minify: false,
@@ -24,7 +27,7 @@ gulp.task('build_dev', function(){
     exec('npm run lite');
 });
 
-gulp.task('build_prod', function(){
+gulp.task('build_prod', ['compile'], function(){
     jspm({
       bundleOptions: {
         minify: true,
