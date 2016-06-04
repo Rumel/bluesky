@@ -35,6 +35,9 @@ defmodule BlueSky.RoomChannel do
     room = GameService.new_room(name, player_name)
     player = List.first(room.players)
 
+    broadcast! socket, "room_added", %{ id: room.id, name: room.name }
+    {:noreply, socket}
+
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room.id })
 
     broadcast! socket, "new_room", %{ id: room.id, name: room.name }

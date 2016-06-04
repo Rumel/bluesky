@@ -23,8 +23,6 @@ gulp.task('build_dev', ['compile'], function(){
       bundleSfx: true
     })
     .pipe(gulp.dest('./'));
-
-    exec('npm run lite');
 });
 
 gulp.task('build_prod', ['compile'], function(){
@@ -40,7 +38,5 @@ gulp.task('build_prod', ['compile'], function(){
       bundleSfx: true
     })
     .pipe(gulp.dest('./'));
-
-    exec('npm run lite');
 });
 

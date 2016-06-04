@@ -13,6 +13,7 @@ declare module "phoenix_js" {
     onClose(callback: any): void;
     onError(callback: any): void;
     on(event: any, callback: any): void;
+    off(event: any): void;
     onMessage(event: any, payload: any, ref: any): void;
     push(event: any, payload: any): any;
     leave(): void;

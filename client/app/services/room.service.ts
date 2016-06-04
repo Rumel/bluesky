@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { CommunicationService } from '../services/communication.service';
 import { PlayerService } from '../services/player.service';
 import { Observable, Observer } from 'rxjs/Rx';
 import { Room } from '../models/room';
 
 @Injectable()
-export class RoomService {
+export class RoomService implements OnInit {
     rooms$: Observable<Array<Room>>;
     private _roomsObserver: Observer<Array<Room>>;
     private _rooms: Array<Room>;
@@ -33,13 +33,21 @@ export class RoomService {
         this._communicationService.roomChannel.push("get_rooms", { }).receive("ok", function (rooms_resp) {            
             that._rooms = rooms_resp.rooms;
             that._roomsObserver.next(that._rooms);       
-        });            
+        });   
+        
+        this._communicationService.roomChannel.on("room_added", room => { 
+            var addRooms = new Array<Room>();
+            addRooms.push(room);            
+            this._rooms.push(room);
+            this._roomsObserver.next(addRooms);       
+        });         
     }
     
     createRoom(name: string) {                       
         this._communicationService.roomChannel.onError(e => console.log('Error in room channel in signup.service.', e));        
         this._communicationService.roomChannel.onClose(c => console.log('room channel closed in signup.service.', name));
-            
+        
+        this._communicationService.roomChannel.off("new_room");    
         // Set up response for the new room
         this._communicationService.roomChannel.on("new_room", room => {             
             // this._selectedRoom = room;   
@@ -61,5 +69,9 @@ export class RoomService {
     
     getRoomId() {
         return this._selectedRoom.id;
+    }
+    
+    ngOnInit() {
+        
     }
 }
