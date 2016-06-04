@@ -17,10 +17,16 @@ export class QuestionComponent implements OnInit {
     isQuestionAnswered: boolean;
     remainingSeconds: number;
     isGameOver: boolean;
+    createdRoom: boolean;
            
     private _countdownTimer: any;
     
     constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService) { }
+    
+    startGame() {
+        console.log('Game started.');
+        this.triviaService.startGame();
+    }
     
     answerSelected(question: number, selector: string) {        
         let selectedAnswer = this.question.answers.find(x => x.selector === selector);
@@ -51,6 +57,7 @@ export class QuestionComponent implements OnInit {
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;
         this.isGameOver = false;
+        this.createdRoom = this._playerService.getCreatedRoom();
 
         // Subscribe to the observable.
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));

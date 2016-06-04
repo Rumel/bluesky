@@ -18,6 +18,10 @@ export class TriviaService {
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
         this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;  
     }
+    
+    startGame() {
+        this._communicationService.roomChannel.push("start_game", {});
+    }
           
     getQuestions() {        
         this._communicationService.roomChannel.on("new_question", msg => {

@@ -3,6 +3,7 @@ import { NgForm }    from '@angular/common';
 import { Router } from '@angular/router-deprecated';
 import { Room } from '../models/room';
 import { RoomService } from '../services/room.service';
+import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'room',
@@ -13,9 +14,8 @@ export class RoomComponent implements OnInit {
     roomInput: Room;
     
     roomlist: Array<Room>;
-    bob: string;
-           
-    constructor(private _router: Router, private _roomService: RoomService) {}
+               
+    constructor(private _router: Router, private _roomService: RoomService, private _playerService: PlayerService) {}
     
     private setRoomList(roomList) {            
       roomList.forEach((x) => {
@@ -32,6 +32,7 @@ export class RoomComponent implements OnInit {
         this._router.navigate(['Question']);
       });
       
+      this._playerService.setCreatedRoom(false);
       this._roomService.joinRoom(room);             
     } 
     
@@ -40,7 +41,8 @@ export class RoomComponent implements OnInit {
         this.roomInput = selectedRoom;
         this._router.navigate(['Question']);
       });
-            
+      
+      this._playerService.setCreatedRoom(true);
       this._roomService.createRoom(this.roomInput.name);
     }
             

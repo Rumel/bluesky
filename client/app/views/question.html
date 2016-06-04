@@ -1,9 +1,12 @@
 <div *ngIf="!isGameOver">
-    <div *ngIf="!question.text">
+    <div *ngIf="!question.text && !createdRoom">
         <p>
             Waiting for game to start 
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         </p>
+    </div>
+    <div *ngIf="!question.text && createdRoom">        
+        <button class="btn btn-primary" (click)="startGame()">Start Game</button>        
     </div>
     <div *ngIf="question.text">
         <h3>
