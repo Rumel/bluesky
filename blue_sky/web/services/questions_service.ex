@@ -13,7 +13,7 @@ defmodule BlueSky.QuestionsService do
   end
 
   def init(state) do
-    Process.send_after(self, :work, 5_000) # In 5 seconds
+    Process.send_after(self, :work, 1_000) # In 1 second
     IO.puts "Starting a genserver with process id #{inspect(self)}"
     {:ok, state}
   end
@@ -35,7 +35,8 @@ defmodule BlueSky.QuestionsService do
 
         BlueSky.Endpoint.broadcast_from(self, room_name, "new_question", 
           %{
-            question: random_question.question, 
+            question: random_question.question,
+            order: length(state.question_ids) + 1,
             question_id: random_question.id,
             a: random_question.a,
             b: random_question.b,

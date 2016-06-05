@@ -38,4 +38,22 @@
     <h1>
         Game Over!
     </h1>
+    <div>
+        <table class="table leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Correct</th>
+                </tr> 
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of leaderboard.results; let i = index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{result.player_id}} //TODO: Get player name from the list of players stored for the room</td>
+                    <td>{{result.correct}}</td>
+                </tr>
+            </tbody> 
+        </table>
+    </div>
 </div>

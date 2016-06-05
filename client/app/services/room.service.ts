@@ -51,20 +51,12 @@ export class RoomService implements OnInit {
         this._communicationService.roomChannel.onError(e => console.log('Error in room channel in signup.service.', e));        
         this._communicationService.roomChannel.onClose(c => console.log('room channel closed in signup.service.', name));
         
-        this._communicationService.roomChannel.off("new_room");    
-        // Set up response for the new room
-        this._communicationService.roomChannel.on("new_room", room => {             
-            // this._selectedRoom = room;   
-            // this._roomObserver.next(this._selectedRoom);    
-            this.joinRoom(room.id);          
-        });
-                   
-        let that = this; 
-        this._communicationService.roomChannel.push("new_room", { "name": name, "player_name": this._playerService.getPlayerName() });
-        // .receive("ok", function(room) {
-        //     that._selectedRoom = room;
-        //     that._roomObserver.next(that._selectedRoom);        
-        // });
+        this._communicationService.roomChannel.push("new_room", { "name": name, "player_name": this._playerService.getPlayerName() })
+            .receive("ok", room => {
+                console.log("created room", room);
+                this.joinRoom(room.id); 
+            })
+            .receive("error", (reasons) => console.log("create failed", reasons));
     }
     
     getRoomName() {
