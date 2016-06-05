@@ -29,6 +29,8 @@ defmodule BlueSky.RoomChannel do
 
     # Start the server and game
     BlueSky.QuestionsService.start_link(room_id)
+
+    {:noreply, socket}
   end
 
   def handle_in("new_room", %{"name" => name, "player_name" => player_name} = params, socket) do
@@ -36,7 +38,6 @@ defmodule BlueSky.RoomChannel do
     player = List.first(room.players)
 
     broadcast! socket, "room_added", %{ id: room.id, name: room.name }
-    {:noreply, socket}
 
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room.id })
 
@@ -53,7 +54,6 @@ defmodule BlueSky.RoomChannel do
     #How do I do custom encoders?
     #http://www.cultivatehq.com/posts/serialisation-of-ecto-models-in-phoenix-channels-and-views/
 
-    #broadcast! socket, "rooms_list", %{ rooms: rooms }
     {:reply, {:ok, %{ rooms: rooms }}, socket}
   end
 
@@ -64,9 +64,7 @@ defmodule BlueSky.RoomChannel do
                     %{ name: player.name, id: player.id }
                 end)
 
-    broadcast! socket, "all_players", players
-
-    {:noreply, socket}
+    {:reply, {:ok, %{ players: players }}, socket}
   end
 
   def handle_in("new_guess", %{"question_id" => question_id, "guess" => guess} = params, socket) do
