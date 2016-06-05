@@ -5,6 +5,7 @@ import { TriviaService } from '../services/trivia.service';
 import { Question } from '../models/question';
 import { Leaderboard } from '../models/leaderboard';
 import { Answer } from '../models/answer';
+import { Player } from '../models/player';
 import { PlayerService } from '../services/player.service';
 import { RoomService } from '../services/room.service';
 
@@ -21,7 +22,7 @@ export class QuestionComponent implements OnInit {
     remainingSeconds: number;
     isGameOver: boolean;
     createdRoom: boolean;
-    players: Array<string>;
+    players: Array<Player>;
     isGuessCorrect: boolean;
     showGuessStatus: boolean;
            
@@ -58,10 +59,10 @@ export class QuestionComponent implements OnInit {
         this._countdownTimer = setInterval(() => this.remainingSeconds--, 1000);             
     }
     
-    private addPlayersToList(players: Array<string>) {
-        players.forEach(player => {
-            this.players.push(player);
-        });
+    private addPlayersToList(players) {  
+        for(var x = 0; x < players.length; x++) {
+            this.players.push(players[x]);
+        }                                                 
     }
     
     private guessStatus(guess: any) {        
@@ -71,7 +72,8 @@ export class QuestionComponent implements OnInit {
     
     ngOnInit() {
         this.question = new Question();
-        this.question.answers = new Array<Answer>();        
+        this.question.answers = new Array<Answer>();  
+        this.players = new Array<Player>();      
         this.playerName = this._playerService.getPlayerName()
         this.remainingSeconds = 30;
         this.isQuestionAnswered = false;

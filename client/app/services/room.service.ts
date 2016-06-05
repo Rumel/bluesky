@@ -3,6 +3,7 @@ import { CommunicationService } from '../services/communication.service';
 import { PlayerService } from '../services/player.service';
 import { Observable, Observer } from 'rxjs/Rx';
 import { Room } from '../models/room';
+import { Player } from '../models/player';
 
 @Injectable()
 export class RoomService implements OnInit {
@@ -13,13 +14,13 @@ export class RoomService implements OnInit {
     private _roomObserver: Observer<Room>;
     private _selectedRoom: Room;
     
-    players$: Observable<Array<string>>;
-    private _playersObserver: Observer<Array<string>>;
+    players$: Observable<Array<Player>>;
+    private _playersObserver: Observer<Array<Player>>;
             
     constructor(private _communicationService: CommunicationService, private _playerService: PlayerService) {
         this.rooms$ = new Observable<Array<Room>>(observer =>  this._roomsObserver = observer).share();
         this.room$ = new Observable<Room>(observer =>  this._roomObserver = observer).share(); 
-        this.players$ = new Observable<Array<string>>(observer =>  this._playersObserver = observer).share();      
+        this.players$ = new Observable<Array<Player>>(observer =>  this._playersObserver = observer).share();      
      }
     
     joinRoom(room: any) {
@@ -67,12 +68,18 @@ export class RoomService implements OnInit {
         return this._selectedRoom.id;
     }
     
-    getPlayers() {
-        this._communicationService.roomChannel.on("all_players", players => {
-            this._playersObserver.next(players);    
-        });
+    getPlayers() {        
+        let that = this;
         
-        this._communicationService.roomChannel.push("get_players" , { });        
+        this._communicationService.roomChannel.push("get_players" , { }).receive("ok", function(players) {     
+            let playersInRoom = new Array<Player>();
+                                 
+            if(players != null) {
+                playersInRoom = players.players;
+            }
+                                 
+            that._playersObserver.next(playersInRoom); 
+        });        
     }
     
     ngOnInit() {
