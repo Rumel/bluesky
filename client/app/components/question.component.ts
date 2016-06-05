@@ -20,6 +20,8 @@ export class QuestionComponent implements OnInit {
     isGameOver: boolean;
     createdRoom: boolean;
     players: Array<string>;
+    isGuessCorrect: boolean;
+    showGuessStatus: boolean;
            
     private _countdownTimer: any;
     
@@ -31,6 +33,8 @@ export class QuestionComponent implements OnInit {
     }
     
     answerSelected(question: number, selector: string) {        
+        this.showGuessStatus = false;
+        
         let selectedAnswer = this.question.answers.find(x => x.selector === selector);
         this.selectedAnswerToDisplay = selectedAnswer.selector + ". " + selectedAnswer.text;        
         this.isQuestionAnswered = true;
@@ -58,6 +62,11 @@ export class QuestionComponent implements OnInit {
         });
     }
     
+    private guessStatus(guess: any) {        
+        this.isGuessCorrect = guess.correct; 
+        this.showGuessStatus = true;       
+    }
+    
     ngOnInit() {
         this.question = new Question();
         this.question.answers = new Array<Answer>();        
@@ -71,9 +80,10 @@ export class QuestionComponent implements OnInit {
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
         this.triviaService.gameover$.subscribe(go => this.isGameOver = true);
         this._roomService.players$.subscribe(players => this.addPlayersToList(players));
+        this.triviaService.guess$.subscribe(guess => this.guessStatus(guess));
         
         // Initiate the subscription.
         this.triviaService.getQuestions();        
-        this._roomService.getPlayers();                
+        //this._roomService.getPlayers();                
     }
 }

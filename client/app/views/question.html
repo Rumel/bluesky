@@ -30,7 +30,7 @@
     </div>
     <div *ngIf="isQuestionAnswered && selectedAnswerToDisplay">
         <div>
-            You chose: {{selectedAnswerToDisplay}}
+            You chose: {{selectedAnswerToDisplay}} <i class="fa fa-thumbs-up" aria-hidden="true" *ngIf="showGuessStatus && isGuessCorrect"></i><i class="fa fa-thumbs-down" aria-hidden="true" *ngIf="showGuessStatus && !isGuessCorrect"></i>
         </div>
     </div>   
 </div>

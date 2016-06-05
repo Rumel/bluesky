@@ -14,9 +14,13 @@ export class TriviaService {
     gameover$: Observable<boolean>;
     private _gameoverObserver: Observer<boolean>;
     
+    guess$: Observable<boolean>;
+    private _guessObserver: Observer<boolean>;
+    
     constructor(private _communicationService: CommunicationService) { 
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
-        this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;  
+        this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;
+        this.guess$ = new Observable<boolean>(observer => this._guessObserver = observer).share() ;  
     }
     
     startGame() {
@@ -69,6 +73,7 @@ export class TriviaService {
     submitAnswer(question: number, answer: string) {                
         this._communicationService.roomChannel.on("guessed", receivedGuess => {
             console.log('Received ' + receivedGuess.guess_guess + ' for question ' + receivedGuess.guess_id);
+            this._guessObserver.next(receivedGuess);
         });
         
         this._communicationService.roomChannel.push("new_guess", { question_id: question, guess: answer })
