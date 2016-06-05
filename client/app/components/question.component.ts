@@ -3,6 +3,7 @@ import { Router, RouteParams } from '@angular/router-deprecated';
 import { OnInit } from '@angular/core';
 import { TriviaService } from '../services/trivia.service';
 import { Question } from '../models/question';
+import { Leaderboard } from '../models/leaderboard';
 import { Answer } from '../models/answer';
 import { PlayerService } from '../services/player.service';
 
@@ -12,6 +13,7 @@ import { PlayerService } from '../services/player.service';
 })
 export class QuestionComponent implements OnInit {
     question: Question;
+    leaderboard: Leaderboard;
     playerName: string;    
     selectedAnswerToDisplay: string;
     isQuestionAnswered: boolean;
@@ -61,6 +63,7 @@ export class QuestionComponent implements OnInit {
 
         // Subscribe to the observable.
         this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
+        this.triviaService.leaderboard$.subscribe(leaderboardResult => this.leaderboard = leaderboardResult);
         this.triviaService.gameover$.subscribe(go => this.isGameOver = true);
         
         // Initiate the subscription.

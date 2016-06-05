@@ -13,7 +13,7 @@ defmodule BlueSky.QuestionsService do
   end
 
   def init(state) do
-    Process.send_after(self, :work, 5_000) # In 5 seconds
+    Process.send_after(self, :work, 1_000) # In 1 second
     IO.puts "Starting a genserver with process id #{inspect(self)}"
     {:ok, state}
   end

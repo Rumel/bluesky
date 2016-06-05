@@ -20,8 +20,15 @@ defmodule BlueSky.RoomChannel do
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room_id })
 
     #broadcast! socket, "new_player", %{ name: player.name, id: player.id }
+    send(self, { :after_join, %{ name: player.name, id: player.id }})
 
     {:ok, %{ player_id: player.id, room_id: room_id }, socket}
+  end
+
+  def handle_info({:after_join, player}, socket) do
+    broadcast! socket, "new_player", player
+
+    {:noreply, socket}
   end
 
   def handle_in("start_game", _params, socket) do

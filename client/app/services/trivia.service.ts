@@ -3,6 +3,7 @@ import { Observable, Observer } from 'rxjs/Rx';
 import { CommunicationService } from '../services/communication.service';
 import { Question } from '../models/question';
 import { Answer } from '../models/answer';
+import { Leaderboard } from '../models/leaderboard';
 
 @Injectable()
 export class TriviaService {
@@ -13,10 +14,16 @@ export class TriviaService {
     
     gameover$: Observable<boolean>;
     private _gameoverObserver: Observer<boolean>;
+
+    leaderboard$: Observable<Leaderboard>;
+    private _leaderboardObserver: Observer<Leaderboard>;
+    private _leaderboard: Leaderboard;
+
     
     constructor(private _communicationService: CommunicationService) { 
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
         this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;  
+        this.leaderboard$ = new Observable<Leaderboard>(observer => this._leaderboardObserver = observer).share() ;  
     }
     
     startGame() {
@@ -57,8 +64,16 @@ export class TriviaService {
             this._questionObserver.next(this._question);
         });
         
-        this._communicationService.roomChannel.on("game_over", () => {
-            console.log('Game over.');
+        this._communicationService.roomChannel.on("game_over", response => {
+            console.log('Game over.', response);
+
+            let leaderboard = new Leaderboard();
+            leaderboard.results = response.leaderboard;
+
+            this._leaderboard = leaderboard;
+            console.log(leaderboard);
+            this._leaderboardObserver.next(this._leaderboard);
+
             this._gameoverObserver.next(true);            
         });
         
