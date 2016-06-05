@@ -84,6 +84,6 @@ export class QuestionComponent implements OnInit {
         
         // Initiate the subscription.
         this.triviaService.getQuestions();        
-        //this._roomService.getPlayers();                
+        this._roomService.getPlayers();                
     }
 }
