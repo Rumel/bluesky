@@ -35,7 +35,8 @@ defmodule BlueSky.QuestionsService do
 
         BlueSky.Endpoint.broadcast_from(self, room_name, "new_question", 
           %{
-            question: random_question.question, 
+            question: random_question.question,
+            order: length(state.question_ids) + 1,
             question_id: random_question.id,
             a: random_question.a,
             b: random_question.b,

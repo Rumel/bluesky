@@ -6,8 +6,12 @@ gulp.task('prep', function() {
     exec('npm install');
 });
 
-gulp.task('compile', function() {
-    exec('npm run tsc');
+gulp.task('compile', function(done) {
+  exec('npm run tsc', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    done(err);
+  });
 });
 
 gulp.task('build_dev', ['compile'], function(){

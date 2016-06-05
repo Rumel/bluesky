@@ -27,7 +27,7 @@ export class TriviaService {
         this._communicationService.roomChannel.on("new_question", msg => {
             let newQuestion = new Question();
             newQuestion.id = msg.question_id;
-            newQuestion.order = msg.question_id;
+            newQuestion.order = msg.order;
             newQuestion.text = msg.question;
             
             let answers = new Array<Answer>();
