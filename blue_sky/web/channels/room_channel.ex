@@ -48,8 +48,7 @@ defmodule BlueSky.RoomChannel do
 
     socket = assign(socket, :player_details, %{ player_id: player.id, room_id: room.id })
 
-    broadcast! socket, "new_room", %{ id: room.id, name: room.name }
-    {:noreply, socket}
+    {:reply, {:ok, %{ id: room.id, name: room.name }}, socket}
   end
 
   def handle_in("get_rooms", _params, socket) do
