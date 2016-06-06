@@ -1,13 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, RouteParams } from '@angular/router-deprecated';
-import { OnInit } from '@angular/core';
 import { TriviaService } from '../services/trivia.service';
+import { PlayerService } from '../services/player.service';
+import { RoomService } from '../services/room.service';
 import { Question } from '../models/question';
 import { Leaderboard } from '../models/leaderboard';
 import { Answer } from '../models/answer';
 import { Player } from '../models/player';
-import { PlayerService } from '../services/player.service';
-import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'question',
@@ -28,21 +27,23 @@ export class QuestionComponent implements OnInit {
            
     private _countdownTimer: any;
     
-    constructor(private triviaService: TriviaService, private _router: Router, private _routeParams: RouteParams, private _playerService: PlayerService, private _roomService: RoomService) { }
+    constructor(private _router: Router, private _routeParams: RouteParams, private _triviaService: TriviaService, private _playerService: PlayerService, private _roomService: RoomService) { }
     
     startGame() {
-        console.log('Game started.');
-        this.triviaService.startGame();
+        this._triviaService.startGame();
     }
     
-    answerSelected(question: number, selector: string) {        
+    answerSelected(question: number, selector: string) {          
+        // Hide guess status.
         this.showGuessStatus = false;
         
+        // Set the selected answer.
         let selectedAnswer = this.question.answers.find(x => x.selector === selector);
         this.selectedAnswerToDisplay = selectedAnswer.selector + ". " + selectedAnswer.text;        
         this.isQuestionAnswered = true;
         
-        this.triviaService.submitAnswer(question, selector);        
+        // Push up the answer to the server.
+        this._triviaService.submitAnswer(question, selector);        
     }
     
     private handleNextQuestion(nextQuestion: Question) {
@@ -60,12 +61,14 @@ export class QuestionComponent implements OnInit {
     }
     
     private addPlayersToList(players) {  
+        // As players join the room, append them to the list.
         for(var x = 0; x < players.length; x++) {
             this.players.push(players[x]);
         }                                                 
     }
     
     private guessStatus(guess: any) {        
+        // Show whether the guess is correct or incorrect.
         this.isGuessCorrect = guess.correct; 
         this.showGuessStatus = true;       
     }
@@ -80,15 +83,15 @@ export class QuestionComponent implements OnInit {
         this.isGameOver = false;
         this.createdRoom = this._playerService.getCreatedRoom();
 
-        // Subscribe to the observable.
-        this.triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
-        this.triviaService.leaderboard$.subscribe(leaderboardResult => this.leaderboard = leaderboardResult);
-        this.triviaService.gameover$.subscribe(go => this.isGameOver = true);
+        // Subscribe to the observables.
+        this._triviaService.question$.subscribe(nextQuestion => this.handleNextQuestion(nextQuestion));
+        this._triviaService.leaderboard$.subscribe(leaderboardResult => this.leaderboard = leaderboardResult);
+        this._triviaService.gameover$.subscribe(go => this.isGameOver = true);
         this._roomService.players$.subscribe(players => this.addPlayersToList(players));
-        this.triviaService.guess$.subscribe(guess => this.guessStatus(guess));
+        this._triviaService.guess$.subscribe(guess => this.guessStatus(guess));
         
-        // Initiate the subscription.
-        this.triviaService.getQuestions();        
+        // Initiate the subscriptions.
+        this._triviaService.getQuestions();        
         this._roomService.getPlayers();                
     }
 }

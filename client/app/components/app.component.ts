@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { SignUpComponent } from './signup.component';
 import { QuestionComponent } from './question.component';
@@ -36,4 +35,4 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
 
 export class AppComponent {
     constructor(private triviaService: TriviaService) { }
- }
+}
