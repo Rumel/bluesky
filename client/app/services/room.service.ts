@@ -10,6 +10,7 @@ export class RoomService implements OnInit {
     rooms$: Observable<Array<Room>>;
     private _roomsObserver: Observer<Array<Room>>;
     private _rooms: Array<Room>;
+    
     room$: Observable<Room>;
     private _roomObserver: Observer<Room>;
     private _selectedRoom: Room;
@@ -26,22 +27,23 @@ export class RoomService implements OnInit {
      }
     
     joinRoom(room: any) {
-        console.log('Joined room', room);
+        // Switch from the lobby to a specific room.
         this._communicationService.changeRoomChannel(room, this._playerService.getPlayerName());
         this._selectedRoom = room;
+        
+        // Tell the subscribers the room has changed.
         this._roomObserver.next(this._selectedRoom);  
     } 
                 
     getRoomList() {                       
-        this._communicationService.roomChannel.onError(e => console.log('Error in room channel in signup.service.', e));        
-        this._communicationService.roomChannel.onClose(c => console.log('room channel closed in signup.service.'));
-
+        // Get all of the rooms already created.
         let that = this;              
         this._communicationService.roomChannel.push("get_rooms", { }).receive("ok", function (rooms_resp) {            
             that._rooms = rooms_resp.rooms;
             that._roomsObserver.next(that._rooms);       
         });   
         
+        // If the user remains on the rooms page, append any rooms as they are created.
         this._communicationService.roomChannel.on("room_added", room => { 
             var addRooms = new Array<Room>();
             addRooms.push(room);            
@@ -51,15 +53,11 @@ export class RoomService implements OnInit {
     }
     
     createRoom(name: string) {                       
-        this._communicationService.roomChannel.onError(e => console.log('Error in room channel in signup.service.', e));        
-        this._communicationService.roomChannel.onClose(c => console.log('room channel closed in signup.service.', name));
-        
+        // Create the room.        
         this._communicationService.roomChannel.push("new_room", { "name": name, "player_name": this._playerService.getPlayerName() })
-            .receive("ok", room => {
-                console.log("created room", room);
+            .receive("ok", room => {                
                 this.joinRoom(room.id); 
-            })
-            .receive("error", (reasons) => console.log("create failed", reasons));
+            });            
     }
     
     getRoomName() {
@@ -73,11 +71,13 @@ export class RoomService implements OnInit {
     getPlayers() {        
         let that = this;
         
+        // Get the current rooms.
         this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
             if(players != null) {
                 this._players = players.players;
             }
             
+            // As any rooms are added, append them to the list. Inside of here because of the reuse of the event in Elixir code.
             that._communicationService.roomChannel.on("new_player", player => {            
                 that._players.push(player);            
                 let pushArray = new Array<Player>();
@@ -87,9 +87,7 @@ export class RoomService implements OnInit {
             });  
                                  
             that._playersObserver.next(this._players); 
-        });      
-        
-       
+        });                     
     }
     
     ngOnInit() {

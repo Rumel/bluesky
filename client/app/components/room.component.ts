@@ -17,7 +17,8 @@ export class RoomComponent implements OnInit {
                
     constructor(private _router: Router, private _roomService: RoomService, private _playerService: PlayerService) {}
     
-    private setRoomList(roomList) {            
+    private setRoomList(roomList) {      
+      // As rooms are added to the observable, add them to the list.      
       roomList.forEach((x) => {
         let roomToAdd = new Room();           
         roomToAdd.id = x.id;    
@@ -27,6 +28,7 @@ export class RoomComponent implements OnInit {
     }
     
     joinRoom(room: any) {
+      // Subscribe to the observable, and navigate to the Question component once the server confirms the room selection.
       this._roomService.room$.subscribe((selectedRoom) => {
         this.roomInput = selectedRoom;
         this._router.navigate(['Question']);
@@ -37,6 +39,7 @@ export class RoomComponent implements OnInit {
     } 
     
     createRoom() {
+      // Subscribe to the observable, and navigate to the Question component once the server confirms the room selection.
       this._roomService.room$.subscribe((selectedRoom) => {
         this.roomInput = selectedRoom;
         this._router.navigate(['Question']);

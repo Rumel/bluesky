@@ -1,16 +1,15 @@
 import { Injectable , OnInit} from '@angular/core';
 import { Observable, Observer } from 'rxjs/Rx';
 import { CommunicationService } from '../services/communication.service';
+import { RoomService } from '../services/room.service';
 import { Question } from '../models/question';
 import { Answer } from '../models/answer';
 import { Leaderboard } from '../models/leaderboard';
 import { LeaderboardResult } from '../models/leaderboardResult';
-import { RoomService } from '../services/room.service';
 import { Player } from '../models/player';
 
 @Injectable()
-export class TriviaService {
-    
+export class TriviaService {    
     question$: Observable<Question>;
     private _questionObserver: Observer<Question>;
     private _question: Question;
@@ -28,6 +27,7 @@ export class TriviaService {
     private _players: Array<Player>;
     
     constructor(private _communicationService: CommunicationService, private _roomService: RoomService) { 
+        // Set up the observables.
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
         this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;
         this.guess$ = new Observable<boolean>(observer => this._guessObserver = observer).share();   
@@ -36,10 +36,12 @@ export class TriviaService {
     }
     
     startGame() {
+        // Tell the server to start the game.
         this._communicationService.roomChannel.push("start_game", {});
         
         let that = this;
         
+        // This is a hack to marry the leaderboard with the players in order to show the name. Was quicker to do this in Angular than on the server.
         this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
             if(players != null) {
                 that._players = players.players;
@@ -48,6 +50,7 @@ export class TriviaService {
     }
           
     getQuestions() {        
+        // When a question comes in, shape the model.
         this._communicationService.roomChannel.on("new_question", msg => {
             let newQuestion = new Question();
             newQuestion.id = msg.question_id;
@@ -78,12 +81,12 @@ export class TriviaService {
             
             newQuestion.answers = answers;
             this._question = newQuestion;
+            
+            // Push the question down to the observable.
             this._questionObserver.next(this._question);
         });
         
-        this._communicationService.roomChannel.on("game_over", response => {
-            console.log('Game over.', response);
-
+        this._communicationService.roomChannel.on("game_over", response => {            
             let leaderboard = new Leaderboard();
             leaderboard.results = new Array<LeaderboardResult>();
             
@@ -99,30 +102,24 @@ export class TriviaService {
                 
                 leaderboard.results.push(lr);
             });
-            
-            //leaderboard.results = response.leaderboard;
 
-            this._leaderboard = leaderboard;
-            console.log(leaderboard);
+            this._leaderboard = leaderboard;            
             this._leaderboardObserver.next(this._leaderboard);
-
+            
+            // Tell the client the game is over.
             this._gameoverObserver.next(true);            
         });
-        
-        this._communicationService.roomChannel.onError(e => console.log('error', e));
-        this._communicationService.roomChannel.onClose(c => console.log('closed'));
     }
     
-    submitAnswer(question: number, answer: string) {                
-        this._communicationService.roomChannel.on("guessed", receivedGuess => {
-            console.log('Received ' + receivedGuess.guess_guess + ' for question ' + receivedGuess.guess_id);
+    submitAnswer(question: number, answer: string) {     
+        // Tell the client if the guess was correct.           
+        this._communicationService.roomChannel.on("guessed", receivedGuess => {            
             this._guessObserver.next(receivedGuess);
         });
         
+        // Send the guess to the server.
         this._communicationService.roomChannel.push("new_guess", { question_id: question, guess: answer })
         .receive("ok", (msg) => console.log("created message", msg))
         .receive("error", (reasons) => console.log("create failed", reasons));
-        
-        console.log('Submitted ' + answer + ' for question ' + question);
     }
 }
