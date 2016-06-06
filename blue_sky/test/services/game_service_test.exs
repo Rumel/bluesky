@@ -7,8 +7,8 @@ defmodule BlueSky.GameServiceTest do
 
   import Ecto.Query
 
-  def new_room(room_name \\ "Room", player_name \\ "Player One") do
-    GameService.new_room(room_name, player_name)
+  def new_room(room_name \\ "Room") do
+    GameService.new_room(room_name)
   end
 
   test "empty test" do
@@ -28,7 +28,7 @@ defmodule BlueSky.GameServiceTest do
 
   test "getting all rooms" do
     room = new_room 
-    room_two = new_room("Room Two", "Player Two")
+    room_two = new_room("Room Two")
 
     rooms = GameService.get_rooms
 
@@ -66,7 +66,7 @@ defmodule BlueSky.GameServiceTest do
 
     players = GameService.get_players(room)
 
-    assert length(players) == 2
+    assert length(players) == 1
   end
 
   test "getting a random question" do
@@ -78,8 +78,8 @@ defmodule BlueSky.GameServiceTest do
 
   test "guessing on a question" do
     room = new_room 
+    player = GameService.add_player(room, "Lemur One")
     question = GameService.get_random_question([1])
-    player = List.first(room.players)
 
     guess = GameService.answer_question(room.id, question.id, player.id, "a")
 
