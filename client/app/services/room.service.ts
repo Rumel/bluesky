@@ -16,11 +16,13 @@ export class RoomService implements OnInit {
     
     players$: Observable<Array<Player>>;
     private _playersObserver: Observer<Array<Player>>;
+    private _players: Array<Player>;
             
     constructor(private _communicationService: CommunicationService, private _playerService: PlayerService) {
         this.rooms$ = new Observable<Array<Room>>(observer =>  this._roomsObserver = observer).share();
         this.room$ = new Observable<Room>(observer =>  this._roomObserver = observer).share(); 
         this.players$ = new Observable<Array<Player>>(observer =>  this._playersObserver = observer).share();      
+        this._players = new Array<Player>();
      }
     
     joinRoom(room: any) {
@@ -71,15 +73,23 @@ export class RoomService implements OnInit {
     getPlayers() {        
         let that = this;
         
-        this._communicationService.roomChannel.push("get_players" , { }).receive("ok", function(players) {     
-            let playersInRoom = new Array<Player>();
-                                 
+        this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
             if(players != null) {
-                playersInRoom = players.players;
+                this._players = players.players;
             }
+            
+            that._communicationService.roomChannel.on("new_player", player => {            
+                that._players.push(player);            
+                let pushArray = new Array<Player>();
+                pushArray.push(player);           
+                
+                that._playersObserver.next(pushArray);                       
+            });  
                                  
-            that._playersObserver.next(playersInRoom); 
-        });        
+            that._playersObserver.next(this._players); 
+        });      
+        
+       
     }
     
     ngOnInit() {
