@@ -4,15 +4,9 @@
             Waiting for game to start 
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         </p>
-        <!--<div class="list-group">
-            <h4>Players</h4>
-            <div *ngFor="let player of players">
-                {{ player.name }}
-            </div>    
-        </div>-->
     </div>    
     <div *ngIf="!question.text && createdRoom">        
-        <button class="btn btn-primary" (click)="startGame()">Start Game</button>        
+        <button class="btn btn-primary" (click)="startGame()"><i class="fa fa-rocket" aria-hidden="true"></i> Start Game</button>        
     </div>
     <div class="list-group" *ngIf="!question.text">
         <h4>Players</h4>
@@ -22,9 +16,8 @@
     </div>
     <div *ngIf="question.text">
         <h3>
-            #{{question.order}} {{question.text}}
-            <span class="label label-success">{{remainingSeconds}}</span>
-            <!-- *ngClass="{'label-success': remainingSeconds > 10, 'label-warning': remainingSeconds < 11}" -->
+            #{{question.order}} {{question.text}}            
+            <span class="label" [ngClass]="{'label-success': remainingSeconds > 10, 'label-danger': remainingSeconds < 11}">{{remainingSeconds}}</span>            
         </h3>
         <div *ngIf="!isQuestionAnswered" class="radio">
             <div *ngFor="let answer of question.answers" class="col-md-6">
@@ -56,7 +49,7 @@
             <tbody>
                 <tr *ngFor="let result of leaderboard.results; let i = index">
                     <th scope="row">{{i + 1}}</th>
-                    <td>{{result.player_id}} //TODO: Get player name from the list of players stored for the room</td>
+                    <td>{{result.player_name}}</td>
                     <td>{{result.correct}}</td>
                 </tr>
             </tbody> 

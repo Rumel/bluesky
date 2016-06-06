@@ -4,6 +4,9 @@ import { CommunicationService } from '../services/communication.service';
 import { Question } from '../models/question';
 import { Answer } from '../models/answer';
 import { Leaderboard } from '../models/leaderboard';
+import { LeaderboardResult } from '../models/leaderboardResult';
+import { RoomService } from '../services/room.service';
+import { Player } from '../models/player';
 
 @Injectable()
 export class TriviaService {
@@ -22,15 +25,26 @@ export class TriviaService {
     guess$: Observable<boolean>;
     private _guessObserver: Observer<boolean>;
     
-    constructor(private _communicationService: CommunicationService) { 
+    private _players: Array<Player>;
+    
+    constructor(private _communicationService: CommunicationService, private _roomService: RoomService) { 
         this.question$ = new Observable<Question>(observer =>  this._questionObserver = observer).share();     
         this.gameover$ = new Observable<boolean>(observer => this._gameoverObserver = observer).share() ;
-        this.guess$ = new Observable<boolean>(observer => this._guessObserver = observer).share() ;   
-        this.leaderboard$ = new Observable<Leaderboard>(observer => this._leaderboardObserver = observer).share() ;  
+        this.guess$ = new Observable<boolean>(observer => this._guessObserver = observer).share();   
+        this.leaderboard$ = new Observable<Leaderboard>(observer => this._leaderboardObserver = observer).share();
+        this._players = new Array<Player>();  
     }
     
     startGame() {
         this._communicationService.roomChannel.push("start_game", {});
+        
+        let that = this;
+        
+        this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
+            if(players != null) {
+                that._players = players.players;
+            }             
+        });
     }
           
     getQuestions() {        
@@ -71,7 +85,22 @@ export class TriviaService {
             console.log('Game over.', response);
 
             let leaderboard = new Leaderboard();
-            leaderboard.results = response.leaderboard;
+            leaderboard.results = new Array<LeaderboardResult>();
+            
+            response.leaderboard.forEach((x) => {
+                let lr = new LeaderboardResult();
+                
+                lr.player_id = x.player_id;
+                lr.correct = x.correct;
+                
+                let player = this._players.find((p) => p.id === x.player_id);
+                
+                lr.player_name = player.name;
+                
+                leaderboard.results.push(lr);
+            });
+            
+            //leaderboard.results = response.leaderboard;
 
             this._leaderboard = leaderboard;
             console.log(leaderboard);
