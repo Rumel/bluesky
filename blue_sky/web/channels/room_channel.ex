@@ -2,6 +2,7 @@ defmodule BlueSky.RoomChannel do
   use Phoenix.Channel
 
   alias BlueSky.GameService
+  alias BlueSky.QuestionsService
   alias BlueSky.Player
   alias BlueSky.Repo
 
@@ -35,7 +36,7 @@ defmodule BlueSky.RoomChannel do
     room_id = socket.assigns[:player_details].room_id
 
     # Start the server and game
-    BlueSky.QuestionsService.start_link(room_id)
+    QuestionsService.start_game(room_id)
 
     {:noreply, socket}
   end

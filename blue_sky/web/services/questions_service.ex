@@ -5,7 +5,8 @@ defmodule BlueSky.QuestionsService do
 
   def start_link(room_id) do
     state = %{ room_id: room_id, question_ids: [], current_question_id: nil }
-    GenServer.start_link(__MODULE__, state, name: {:global, {:update_questions, room_id}})
+    {:ok, pid } = GenServer.start_link(__MODULE__, state, name: {:global, {:update_questions, room_id}})
+    pid
   end
 
   def whereis(room_id) do
@@ -13,7 +14,6 @@ defmodule BlueSky.QuestionsService do
   end
 
   def init(state) do
-    Process.send_after(self, :work, 1_000) # In 1 second
     IO.puts "Starting a genserver with process id #{inspect(self)}"
     {:ok, state}
   end
@@ -30,6 +30,14 @@ defmodule BlueSky.QuestionsService do
       10 ->
         leaderboard = GameService.get_leaderboard(state.room_id)
         BlueSky.Endpoint.broadcast_from(self, room_name, "game_over", %{ leaderboard: leaderboard })
+
+        # Kill the GenServer
+        IO.puts "Killing the GenServer"
+        IO.inspect whereis(state.room_id)
+        GenServer.stop(whereis(state.room_id))
+        # Shouldn't be reached
+        IO.inspect whereis(state.room_id)
+        IO.puts "I'm like John Cena, you can't see me"
       _ ->
         random_question = GameService.get_random_question(state.question_ids)
 
@@ -70,5 +78,9 @@ defmodule BlueSky.QuestionsService do
 
   def get_questions(room_id) do
     whereis(room_id) |> GenServer.call(:get_questions)
+  end
+
+  def start_game(room_id) do
+    start_link(room_id) |> send(:work) 
   end
 end
