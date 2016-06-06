@@ -22,9 +22,8 @@
     </div>
     <div *ngIf="question.text">
         <h3>
-            #{{question.order}} {{question.text}}
-            <span class="label label-success">{{remainingSeconds}}</span>
-            <!-- *ngClass="{'label-success': remainingSeconds > 10, 'label-warning': remainingSeconds < 11}" -->
+            #{{question.order}} {{question.text}}            
+            <span class="label" [ngClass]="{'label-success': remainingSeconds > 10, 'label-danger': remainingSeconds < 11}">{{remainingSeconds}}</span>            
         </h3>
         <div *ngIf="!isQuestionAnswered" class="radio">
             <div *ngFor="let answer of question.answers" class="col-md-6">
