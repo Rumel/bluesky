@@ -81,8 +81,6 @@ defmodule BlueSky.RoomChannel do
 
     IO.inspect guess
 
-    broadcast! socket, "guessed", %{ guess_id: guess.id, guess_guess: guess.guess, answer: guess.answer, correct: guess.correct }
-
-    {:noreply, socket}
+    {:reply, {:ok, %{ guess_id: guess.id, guess_guess: guess.guess, answer: guess.answer, correct: guess.correct }}, socket}
   end
 end

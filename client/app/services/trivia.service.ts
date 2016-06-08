@@ -39,14 +39,9 @@ export class TriviaService {
         // Tell the server to start the game.
         this._communicationService.roomChannel.push("start_game", {});
         
-        let that = this;
+       
         
-        // This is a hack to marry the leaderboard with the players in order to show the name. Was quicker to do this in Angular than on the server.
-        this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
-            if(players != null) {
-                that._players = players.players;
-            }             
-        });
+        
     }
           
     getQuestions() {        
@@ -86,40 +81,49 @@ export class TriviaService {
             this._questionObserver.next(this._question);
         });
         
-        this._communicationService.roomChannel.on("game_over", response => {            
-            let leaderboard = new Leaderboard();
-            leaderboard.results = new Array<LeaderboardResult>();
-            
-            response.leaderboard.forEach((x) => {
-                let lr = new LeaderboardResult();
+        let that = this;
+        
+        this._communicationService.roomChannel.on("game_over", response => {   
+             
+            // This is a hack to marry the leaderboard with the players in order to show the name. Was quicker to do this in Angular than on the server.
+            this._communicationService.roomChannel.push("get_players", { }).receive("ok", function(players) {                 
+                if(players != null) {
+                    that._players = players.players;
+                }             
                 
-                lr.player_id = x.player_id;
-                lr.correct = x.correct;
+                let leaderboard = new Leaderboard();
+                leaderboard.results = new Array<LeaderboardResult>();
                 
-                let player = this._players.find((p) => p.id === x.player_id);
-                
-                lr.player_name = player.name;
-                
-                leaderboard.results.push(lr);
-            });
+                response.leaderboard.forEach((x) => {
+                    let lr = new LeaderboardResult();
+                    
+                    lr.player_id = x.player_id;
+                    lr.correct = x.correct;
+                    
+                    let player = that._players.find((p) => p.id === x.player_id);
+                    
+                    lr.player_name = player.name;
+                    
+                    leaderboard.results.push(lr);
+                });
 
-            this._leaderboard = leaderboard;            
-            this._leaderboardObserver.next(this._leaderboard);
+                that._leaderboard = leaderboard;            
+                that._leaderboardObserver.next(that._leaderboard);
+                
+                // Tell the client the game is over.
+                that._gameoverObserver.next(true);            
+                });         
             
-            // Tell the client the game is over.
-            this._gameoverObserver.next(true);            
         });
     }
     
     submitAnswer(question: number, answer: string) {     
         // Tell the client if the guess was correct.           
-        this._communicationService.roomChannel.on("guessed", receivedGuess => {            
-            this._guessObserver.next(receivedGuess);
-        });
-        
         // Send the guess to the server.
         this._communicationService.roomChannel.push("new_guess", { question_id: question, guess: answer })
-        .receive("ok", (msg) => console.log("created message", msg))
+        .receive("ok", receivedGuess => {
+            this._guessObserver.next(receivedGuess);
+        })
         .receive("error", (reasons) => console.log("create failed", reasons));
     }
 }
